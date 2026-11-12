@@ -3,72 +3,141 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f7f8f4">
+  <meta name="theme-color" content="#193838">
+  <meta name="description" content="WorkPattern 在本机运行反馈分流模型，帮助你复核判断、跟进处理步骤并导出记录。">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' http://127.0.0.1:8765; base-uri 'none'; object-src 'none'; form-action 'none'">
   <title>WorkPattern · 反馈分流工作台</title>
   <link rel="stylesheet" href="./style.css">
   <script src="./app.js" defer></script>
 </head>
 <body>
-  <header class="bar">
-    <div class="bar-content">
-      <span class="brand"><span class="mark" aria-hidden="true">W</span> WorkPattern</span>
+  <a class="skip-link" href="#workbench">跳到工作台</a>
+  <div class="utility">
+    <div class="wrap utility-inner">
       <span class="connection" id="connection" role="status">本地模型未连接</span>
+      <div class="utility-links">
+        <a href="https://github.com/Aul-Ravens/workpattern#本机运行">安装说明 <span aria-hidden="true">↗</span></a>
+        <a href="https://github.com/Aul-Ravens/workpattern">GitHub <span aria-hidden="true">↗</span></a>
+      </div>
     </div>
-  </header>
+  </div>
+  <div class="masthead" id="top">
+    <img class="hero-art" src="./images/robot-workshop.jpg" alt="" width="1672" height="941" fetchpriority="high">
+    <header class="wrap navigation">
+      <a class="brand" href="#top"><span class="mark" aria-hidden="true">W</span> WorkPattern</a>
+      <nav class="nav-links" aria-label="站内导航">
+        <a href="#how">工作方式</a>
+        <a href="#evaluation">模型评测</a>
+      </nav>
+      <a class="button button-aqua nav-action" href="#workbench">工作台 <span aria-hidden="true">→</span></a>
+    </header>
+    <section class="hero wrap" aria-labelledby="title">
+      <div class="hero-copy">
+        <h1 id="title">分流用户反馈 <span>跟进处理步骤</span></h1>
+        <p>本地模型按产品负责人的准则分流。你可以复核判断，跟进每一步，并导出处理记录。</p>
+        <div class="hero-actions">
+          <a class="button button-lime" href="#workbench">打开工作台 <span aria-hidden="true">→</span></a>
+          <a class="arrow-link" href="#how">了解工作方式 <span aria-hidden="true">↓</span></a>
+        </div>
+      </div>
+    </section>
+  </div>
   <main>
-    <section class="intro" aria-labelledby="title">
-      <h1 id="title">反馈分流工作台</h1>
-      <p>输入一条用户反馈。模型按产品负责人的处理准则分流，你可以复核判断并跟进处理步骤。</p>
-    </section>
-    <section id="connect-panel" class="panel connect-panel" aria-labelledby="connect-title" hidden>
-      <div>
-        <h2 id="connect-title">连接本地模型</h2>
-        <p id="connect-help">请先在本机启动 WorkPattern。浏览器提示访问本地网络时，选择允许。</p>
-        <p id="connect-error" class="error" role="alert" hidden></p>
-      </div>
-      <div class="connect-actions">
-        <button id="connect" class="primary" type="button">连接本地模型</button>
-        <a href="https://github.com/Aul-Ravens/workpattern#本机运行">启动说明</a>
-        <a href="http://127.0.0.1:8765/">本机入口</a>
-      </div>
-    </section>
-    <div class="board">
-      <section class="panel intake" aria-labelledby="intake-title">
-        <h2 id="intake-title">反馈内容</h2>
-        <form id="triage-form">
-          <label class="sr-only" for="feedback">反馈内容</label>
-          <textarea id="feedback" maxlength="500" placeholder="描述用户遇到的情况，附上影响范围、复现条件或已有工单。" required></textarea>
-          <div class="input-meta"><span id="count">0 / 500</span><button type="button" class="text-button" id="clear">清空</button></div>
-          <div id="samples" class="samples" aria-label="示例反馈"></div>
-          <button type="submit" class="primary" id="run" disabled>分析反馈 <span aria-hidden="true">→</span></button>
-          <p class="error" id="error" role="alert" hidden></p>
-        </form>
-      </section>
-      <section class="panel result" aria-labelledby="result-title">
-        <div class="panel-head">
-          <h2 id="result-title">处理流程</h2>
-          <span id="latency"></span>
-        </div>
-        <div id="empty" class="empty">
-          <span class="list-icon" aria-hidden="true"><i></i><i></i><i></i></span>
-          <p>提交反馈后，这里会显示处理步骤。</p>
-        </div>
-        <div id="workflow" hidden>
-          <div class="decision">
-            <h3 id="decision-title"></h3>
-            <p id="criterion"></p>
+    <section class="overview" aria-label="产品概览">
+      <div class="wrap">
+        <dl class="stats">
+          <div><dt>反馈处理流程</dt><dd>5</dd></div>
+          <div><dt>合成训练案例</dt><dd>300</dd></div>
+          <div><dt>独立评测案例</dt><dd>25</dd></div>
+          <div><dt>合成评测准确率</dt><dd>72<span>%</span></dd></div>
+        </dl>
+        <section class="how" id="how" aria-labelledby="how-title">
+          <div class="how-copy">
+            <h2 id="how-title">工作方式</h2>
+            <p>反馈里的一处细节就可能改变处理顺序。少数用户能从备用入口继续使用，可以先复现问题。核心任务大范围受阻，则应先启动故障响应。</p>
+            <p>模型根据反馈给出一条处理路径。你可以改判、勾选完成的步骤，并把模型建议和复核结果一起导出。</p>
+            <a class="button button-aqua" href="#workbench">处理一条反馈 <span aria-hidden="true">→</span></a>
           </div>
-          <label class="override">复核分流 <select id="override"></select></label>
-          <div id="steps"></div>
-          <div class="result-actions"><span id="progress" aria-live="polite"></span><button id="download" class="secondary">导出记录</button></div>
+          <div class="how-images" aria-hidden="true">
+            <img class="review-art" src="./images/robot-review.jpg" width="920" height="690" alt="" loading="lazy">
+            <img class="check-art" src="./images/robot-checklist.jpg" width="760" height="570" alt="" loading="lazy">
+          </div>
+        </section>
+      </div>
+    </section>
+    <section class="workbench wrap" id="workbench" aria-labelledby="workbench-title">
+      <h2 id="workbench-title">反馈分流工作台</h2>
+      <section id="connect-panel" class="panel connect-panel" aria-labelledby="connect-title" hidden>
+        <div>
+          <h3 id="connect-title">连接本地模型</h3>
+          <p id="connect-help">请先在本机启动 WorkPattern。浏览器提示访问本地网络时，选择允许。</p>
+          <p id="connect-error" class="error" role="alert" hidden></p>
+        </div>
+        <div class="connect-actions">
+          <button id="connect" class="primary" type="button">连接本地模型</button>
+          <a href="https://github.com/Aul-Ravens/workpattern#本机运行">启动说明</a>
+          <a href="http://127.0.0.1:8765/">本机入口</a>
         </div>
       </section>
-    </div>
-    <details id="evaluation" class="evaluation" hidden>
-      <summary>模型评测</summary>
-      <div id="metrics"></div>
-    </details>
+      <div class="board">
+        <section class="panel intake" aria-labelledby="intake-title">
+          <h3 id="intake-title">反馈内容</h3>
+          <form id="triage-form">
+            <label class="sr-only" for="feedback">反馈内容</label>
+            <textarea id="feedback" maxlength="500" placeholder="描述用户遇到的情况，附上影响范围、复现条件或已有工单。" required></textarea>
+            <div class="input-meta"><span id="count">0 / 500</span><button type="button" class="text-button" id="clear">清空</button></div>
+            <div id="samples" class="samples" aria-label="示例反馈"></div>
+            <button type="submit" class="primary" id="run" disabled>分析反馈 <span aria-hidden="true">→</span></button>
+            <p class="error" id="error" role="alert" hidden></p>
+          </form>
+        </section>
+        <section class="panel result" aria-labelledby="result-title">
+          <div class="panel-head">
+            <h3 id="result-title">处理流程</h3>
+            <span id="latency"></span>
+          </div>
+          <div id="empty" class="empty">
+            <span class="list-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+            <p>提交反馈后，这里会显示处理步骤。</p>
+          </div>
+          <div id="workflow" hidden>
+            <div class="decision">
+              <h4 id="decision-title"></h4>
+              <p id="criterion"></p>
+            </div>
+            <label class="override">复核分流 <select id="override"></select></label>
+            <div id="steps"></div>
+            <div class="result-actions"><span id="progress" aria-live="polite"></span><button id="download" class="secondary">导出记录</button></div>
+          </div>
+        </section>
+      </div>
+      <details id="local-evaluation" class="evaluation" hidden>
+        <summary>当前连接模型的评测</summary>
+        <div id="metrics"></div>
+      </details>
+    </section>
+    <section class="benchmark" id="evaluation" aria-labelledby="evaluation-title">
+      <div class="wrap benchmark-inner">
+        <div>
+          <h2 id="evaluation-title">模型评测</h2>
+          <p>基座与微调模型使用同一提示词和候选标签，在 25 条独立编写的合成反馈上比较。</p>
+          <a class="arrow-link" href="https://github.com/Aul-Ravens/workpattern/blob/main/model/adapter/evaluation.json">查看逐条评测 <span aria-hidden="true">↗</span></a>
+        </div>
+        <table>
+          <thead><tr><th scope="col">模型</th><th scope="col">答对</th><th scope="col">准确率</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">基座</th><td>7 / 25</td><td>28%</td></tr>
+            <tr><th scope="row">LoRA 微调</th><td>18 / 25</td><td>72%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
   </main>
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <a class="brand" href="#top"><span class="mark" aria-hidden="true">W</span> WorkPattern</a>
+      <a href="https://github.com/Aul-Ravens/workpattern">查看项目源码 <span aria-hidden="true">↗</span></a>
+    </div>
+  </footer>
 </body>
 </html>

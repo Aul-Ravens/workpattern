@@ -21,6 +21,11 @@ ASSETS = {
     "/": ("index.html", "text/html; charset=utf-8"),
     "/app.js": ("app.js", "text/javascript; charset=utf-8"),
     "/style.css": ("style.css", "text/css; charset=utf-8"),
+    "/images/robot-workshop.jpg": ("images/robot-workshop.jpg", "image/jpeg"),
+    "/images/robot-review.jpg": ("images/robot-review.jpg", "image/jpeg"),
+    "/images/robot-checklist.jpg": ("images/robot-checklist.jpg", "image/jpeg"),
+    "/fonts/dm-sans.woff2": ("fonts/dm-sans.woff2", "font/woff2"),
+    "/fonts/rubik.woff2": ("fonts/rubik.woff2", "font/woff2"),
 }
 
 
