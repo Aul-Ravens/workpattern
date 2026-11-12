@@ -92,7 +92,7 @@ async function initialize() {
     status.classList.add("ready");
     status.textContent = `本地模型 · ${config.device === "cuda" ? "GPU" : "CPU"}`;
     const evaluation = config.evaluation;
-    byId("evaluation").hidden = !evaluation;
+    byId("local-evaluation").hidden = !evaluation;
     if (evaluation) {
       const p = document.createElement("p");
       p.textContent = `${evaluation.eval_examples} 条合成测试反馈，基座答对 ${evaluation.baseline.correct} 条，LoRA 答对 ${evaluation.lora.correct} 条。`;
