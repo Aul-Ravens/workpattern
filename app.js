@@ -1,3 +1,70 @@
+const workflowCopy = {
+  A: {
+    title: "Start an incident response",
+    criterion: "A core task is widely blocked, or money or data integrity is at risk.",
+    steps: [
+      ["Confirm the impact", "Check when it started, who is affected, the failure rate, and recent releases."],
+      ["Assign an incident owner", "Have the on-call lead assess throttling, disabling the affected entry point, or rolling back. Record the decision."],
+      ["Verify recovery", "Use monitoring and failed examples to retest the core workflow. Record when it recovered and what still needs attention."],
+    ],
+  },
+  B: {
+    title: "Reproduce and log the defect",
+    criterion: "An existing feature fails under known conditions. The impact is limited or users have a workaround.",
+    steps: [
+      ["Reproduce the issue", "Record the account type, version, device, steps, and expected and actual behavior."],
+      ["File a defect", "Include evidence, impact, and any workaround. Assign it to the owner of the affected feature."],
+      ["Verify the fix", "Retest the original scenario and nearby workflows. Record the version and result."],
+    ],
+  },
+  C: {
+    title: "Validate the feature request",
+    criterion: "The feature works as designed. The user wants a change and has described their task or goal.",
+    steps: [
+      ["Understand the task", "Identify who has the problem, when it occurs, and how they handle it today."],
+      ["Check how often it happens", "Interview a sample of users or review usage data. Identify the goal behind the requested change."],
+      ["Prepare a proposal", "Summarize the impact, success measures, evidence, and the smallest change worth testing."],
+    ],
+  },
+  D: {
+    title: "Link to the existing ticket",
+    criterion: "A known ticket has the same trigger and symptoms, with no new severe impact.",
+    steps: [
+      ["Verify the match", "Check the ticket number, trigger, symptoms, and current status."],
+      ["Add new evidence", "Record when this occurred, how many users were affected, and any reproduction details."],
+      ["Keep the reporter informed", "Update the original ticket and note what progress to share with the reporter."],
+    ],
+  },
+  E: {
+    title: "Ask for missing details",
+    criterion: "The report lacks enough detail about the symptoms, environment, or user goal to choose a workflow.",
+    steps: [
+      ["Clarify the problem", "Ask what the user was trying to do, what happened, and what they expected."],
+      ["Collect evidence", "Ask for the time, device or version, affected users, and screenshots with sensitive details removed."],
+      ["Triage again", "Review the updated report and record what to communicate and when to follow up."],
+    ],
+  },
+};
+
+const samples = {
+  incident: {
+    title: "Service outage",
+    feedback: "After the morning release, paying customers in several regions could no longer place orders. Payment success fell from 97% to 24% in 15 minutes. Signing in again did not help.",
+  },
+  existing: {
+    title: "Known issue",
+    feedback: "Two iOS users stopped receiving verification codes after changing their phone numbers. The trigger, device version, and symptoms match open ticket FB-218, with no new impact.",
+  },
+  request: {
+    title: "Feature request",
+    feedback: "Our operations team exports reports from five channels every week and combines them by hand. Reporting works as intended, but the team wants a bulk export to cut down on repetitive work.",
+  },
+  details: {
+    title: "Missing details",
+    feedback: "A user said the latest release does not feel right and asked for a quick fix. They did not say what they were trying to do, what happened, or what they expected.",
+  },
+};
+
 const byId = (id) => document.getElementById(id);
 const feedback = byId("feedback");
 const run = byId("run");
@@ -7,14 +74,11 @@ const hosted = location.hostname === "aul-ravens.github.io";
 const connectPanel = byId("connect-panel");
 const connectButton = byId("connect");
 const connectError = byId("connect-error");
-const connectHelp = byId("connect-help");
-const defaultConnectHelp = connectHelp.textContent;
 const status = byId("connection");
-let config;
+const latency = byId("latency");
 let current;
 let modelRoute;
 let submittedFeedback;
-let pendingSample;
 
 const menuToggle = byId("menu-toggle");
 const siteMenu = byId("site-menu");
@@ -55,18 +119,19 @@ function updateCount() {
 function updateProgress() {
   const steps = byId("steps").querySelectorAll("input");
   const done = [...steps].filter((step) => step.checked).length;
-  byId("progress").textContent = `已完成 ${done} / ${steps.length}`;
+  byId("progress").textContent = `${done} of ${steps.length} complete`;
 }
 
-function renderWorkflow(route) {
-  current = route;
+function renderWorkflow(code) {
+  current = code;
+  const route = workflowCopy[code];
   byId("decision-title").textContent = route.title;
   byId("criterion").textContent = route.criterion;
   const original = byId("original-decision");
-  original.hidden = route.code === modelRoute.code;
-  original.textContent = original.hidden ? "" : `模型原建议：${modelRoute.title}`;
-  override.value = route.code;
-  byId("steps").replaceChildren(...route.steps.map((step) => {
+  original.hidden = code === modelRoute;
+  original.textContent = original.hidden ? "" : `Original recommendation: ${workflowCopy[modelRoute].title}`;
+  override.value = code;
+  byId("steps").replaceChildren(...route.steps.map(([stepTitle, stepDetail]) => {
     const label = document.createElement("label");
     label.className = "step";
     const input = document.createElement("input");
@@ -74,9 +139,9 @@ function renderWorkflow(route) {
     input.addEventListener("change", updateProgress);
     const copy = document.createElement("span");
     const title = document.createElement("strong");
-    title.textContent = step.title;
+    title.textContent = stepTitle;
     const detail = document.createElement("small");
-    detail.textContent = step.detail;
+    detail.textContent = stepDetail;
     copy.append(title, detail);
     label.append(input, copy);
     return label;
@@ -99,18 +164,20 @@ function fillSample(content) {
 }
 
 document.querySelectorAll("[data-sample]").forEach((link) => {
-  link.addEventListener("click", () => {
-    const name = link.dataset.sample;
-    const sample = config?.samples.find(([title]) => title === name);
-    if (sample && connectPanel.hidden) {
-      fillSample(sample[1]);
-      return;
-    }
-    pendingSample = name;
-    connectHelp.textContent = `已选「${name}」。连接本地模型后会自动填入示例。`;
-    connectButton.focus({preventScroll: true});
-  });
+  link.addEventListener("click", () => fillSample(samples[link.dataset.sample].feedback));
 });
+
+for (const sample of Object.values(samples)) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = sample.title;
+  button.addEventListener("click", () => fillSample(sample.feedback));
+  byId("samples").append(button);
+}
+
+for (const [code, route] of Object.entries(workflowCopy)) {
+  override.add(new Option(route.title, code));
+}
 
 function apiFetch(path, options = {}) {
   const request = {...options, credentials: "omit", redirect: "error"};
@@ -124,42 +191,23 @@ function apiFetch(path, options = {}) {
 async function initialize() {
   connectButton.disabled = true;
   connectError.hidden = true;
-  status.textContent = "正在连接本地模型";
+  status.textContent = "Connecting";
   try {
     const response = await apiFetch("/api/config");
     if (!response.ok) throw new Error();
-    config = await response.json();
+    const config = await response.json();
     feedback.maxLength = config.max_feedback;
     updateCount();
-    byId("samples").replaceChildren();
-    for (const [title, content] of config.samples) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = title;
-      button.addEventListener("click", () => fillSample(content));
-      byId("samples").append(button);
-    }
-    override.replaceChildren();
-    for (const route of config.routes) {
-      override.add(new Option(route.title, route.code));
-    }
-    if (current) override.value = current.code;
     status.classList.add("ready");
-    status.textContent = `本地模型 · ${config.device === "cuda" ? "GPU" : "CPU"}`;
+    status.textContent = `Local model · ${config.device === "cuda" ? "GPU" : "CPU"}`;
     const evaluation = config.evaluation;
     byId("local-evaluation").hidden = !evaluation;
     if (evaluation) {
       const p = document.createElement("p");
-      p.textContent = `${evaluation.eval_examples} 条合成测试反馈，基座答对 ${evaluation.baseline.correct} 条，LoRA 答对 ${evaluation.lora.correct} 条。`;
+      p.textContent = `On ${evaluation.eval_examples} synthetic cases, the base model got ${evaluation.baseline.correct} right and the fine-tuned model got ${evaluation.lora.correct} right.`;
       byId("metrics").replaceChildren(p);
     }
     connectPanel.hidden = true;
-    connectHelp.textContent = defaultConnectHelp;
-    if (pendingSample) {
-      const sample = config.samples.find(([title]) => title === pendingSample);
-      pendingSample = undefined;
-      if (sample) fillSample(sample[1]);
-    }
     showError("");
     run.disabled = false;
   } catch {
@@ -171,14 +219,14 @@ async function initialize() {
 
 function disconnect() {
   status.classList.remove("ready");
-  status.textContent = "本地模型未连接";
+  status.textContent = "Not connected";
   connectPanel.hidden = false;
   connectError.textContent = hosted
-    ? "请确认本机服务已启动，且当前站点可访问本地网络。也可直接打开本机入口。"
-    : "请启动 WorkPattern 本地服务，然后重新连接。";
+    ? "Check that WorkPattern is running and this site can access your local network. You can also open the local page."
+    : "Start the WorkPattern server on this computer, then try again.";
   connectError.hidden = false;
   run.disabled = true;
-  byId("latency").textContent = "正在分析反馈";
+  latency.textContent = "";
 }
 
 connectButton.addEventListener("click", initialize);
@@ -193,12 +241,13 @@ byId("triage-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const input = feedback.value.trim();
   if (!input) {
-    showError("请输入反馈内容。");
+    showError("Enter feedback to analyze.");
     return;
   }
   showError("");
   run.disabled = true;
-  run.firstChild.textContent = "正在分流 ";
+  run.firstChild.textContent = "Analyzing ";
+  latency.textContent = "Analyzing feedback";
   try {
     const response = await apiFetch("/api/triage", {
       method: "POST",
@@ -206,32 +255,33 @@ byId("triage-form").addEventListener("submit", async (event) => {
       body: JSON.stringify({feedback: input}),
     });
     const payload = await response.json();
-    if (!response.ok) throw new Error(payload.error?.message || "本地服务返回了错误。");
+    if (!response.ok || !Object.hasOwn(workflowCopy, payload.workflow?.code)) throw new Error("Invalid result");
     submittedFeedback = input;
-    modelRoute = payload.workflow;
+    modelRoute = payload.workflow.code;
     renderWorkflow(modelRoute);
-    byId("latency").textContent = `分析完成 · ${payload.elapsed_ms} ms`;
+    latency.textContent = `Completed in ${payload.elapsed_ms} ms`;
   } catch (exception) {
-    byId("latency").textContent = "";
+    latency.textContent = "";
     if (exception instanceof TypeError) disconnect();
-    else showError(exception.message);
+    else showError("The model could not analyze this feedback. Try a shorter report and submit it again.");
   } finally {
-    run.firstChild.textContent = "分析反馈 ";
+    run.firstChild.textContent = "Analyze feedback ";
     run.disabled = !connectPanel.hidden;
   }
 });
 
 override.addEventListener("change", () => {
-  renderWorkflow(config.routes.find((route) => route.code === override.value));
+  renderWorkflow(override.value);
 });
 
 byId("download").addEventListener("click", () => {
   const checked = [...byId("steps").querySelectorAll("input")];
-  const steps = current.steps.map((step, index) => `- [${checked[index].checked ? "x" : " "}] ${step.title}：${step.detail}`);
+  const steps = workflowCopy[current].steps.map(([title, detail], index) => `- [${checked[index].checked ? "x" : " "}] **${title}**\n  ${detail}`);
   const escaped = submittedFeedback.split("\n").map((line) => `> ${line}`).join("\n");
   const content = [
-    "# 反馈处理记录", "## 反馈内容", escaped, "## 分流结果",
-    `模型建议：${modelRoute.title}\n\n复核结果：${current.title}`, "## 处理步骤", steps.join("\n"),
+    "# Feedback record", "## Feedback", escaped, "## Triage decision",
+    `Model recommendation: ${workflowCopy[modelRoute].title}\n\nReviewed workflow: ${workflowCopy[current].title}`,
+    "## Next steps", steps.join("\n"),
   ].join("\n\n");
   const url = URL.createObjectURL(new Blob([content], {type: "text/markdown;charset=utf-8"}));
   const link = document.createElement("a");
