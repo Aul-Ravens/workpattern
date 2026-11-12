@@ -1,0 +1,211 @@
+{
+  "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
+  "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "gpu": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
+  "torch_version": "2.7.1+cu128",
+  "seed": 42,
+  "train_examples": 300,
+  "eval_examples": 25,
+  "epochs": 4,
+  "batch_size": 8,
+  "trainable_parameters": 1081344,
+  "peak_allocated_vram_mib": 3292,
+  "elapsed_seconds": 24.2,
+  "epoch_loss": [
+    0.7768,
+    0.0145,
+    0.0246,
+    0.0121
+  ],
+  "baseline": {
+    "correct": 7,
+    "accuracy": 0.28,
+    "macro_f1": 0.2232,
+    "per_route": {
+      "A": {
+        "support": 5,
+        "correct": 0,
+        "f1": 0.0
+      },
+      "B": {
+        "support": 5,
+        "correct": 4,
+        "f1": 0.8
+      },
+      "C": {
+        "support": 5,
+        "correct": 3,
+        "f1": 0.3158
+      },
+      "D": {
+        "support": 5,
+        "correct": 0,
+        "f1": 0.0
+      },
+      "E": {
+        "support": 5,
+        "correct": 0,
+        "f1": 0.0
+      }
+    }
+  },
+  "lora": {
+    "correct": 18,
+    "accuracy": 0.72,
+    "macro_f1": 0.71,
+    "per_route": {
+      "A": {
+        "support": 5,
+        "correct": 3,
+        "f1": 0.75
+      },
+      "B": {
+        "support": 5,
+        "correct": 4,
+        "f1": 0.8
+      },
+      "C": {
+        "support": 5,
+        "correct": 4,
+        "f1": 0.6667
+      },
+      "D": {
+        "support": 5,
+        "correct": 2,
+        "f1": 0.5
+      },
+      "E": {
+        "support": 5,
+        "correct": 5,
+        "f1": 0.8333
+      }
+    }
+  },
+  "predictions": [
+    {
+      "expected": "A",
+      "baseline": "D",
+      "lora": "A"
+    },
+    {
+      "expected": "A",
+      "baseline": "C",
+      "lora": "E"
+    },
+    {
+      "expected": "A",
+      "baseline": "C",
+      "lora": "D"
+    },
+    {
+      "expected": "A",
+      "baseline": "C",
+      "lora": "A"
+    },
+    {
+      "expected": "A",
+      "baseline": "B",
+      "lora": "A"
+    },
+    {
+      "expected": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "expected": "B",
+      "baseline": "C",
+      "lora": "B"
+    },
+    {
+      "expected": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "expected": "B",
+      "baseline": "B",
+      "lora": "C"
+    },
+    {
+      "expected": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "expected": "C",
+      "baseline": "D",
+      "lora": "E"
+    },
+    {
+      "expected": "C",
+      "baseline": "C",
+      "lora": "C"
+    },
+    {
+      "expected": "C",
+      "baseline": "C",
+      "lora": "C"
+    },
+    {
+      "expected": "C",
+      "baseline": "C",
+      "lora": "C"
+    },
+    {
+      "expected": "C",
+      "baseline": "D",
+      "lora": "C"
+    },
+    {
+      "expected": "D",
+      "baseline": "C",
+      "lora": "C"
+    },
+    {
+      "expected": "D",
+      "baseline": "C",
+      "lora": "D"
+    },
+    {
+      "expected": "D",
+      "baseline": "C",
+      "lora": "C"
+    },
+    {
+      "expected": "D",
+      "baseline": "C",
+      "lora": "D"
+    },
+    {
+      "expected": "D",
+      "baseline": "C",
+      "lora": "B"
+    },
+    {
+      "expected": "E",
+      "baseline": "C",
+      "lora": "E"
+    },
+    {
+      "expected": "E",
+      "baseline": "D",
+      "lora": "E"
+    },
+    {
+      "expected": "E",
+      "baseline": "D",
+      "lora": "E"
+    },
+    {
+      "expected": "E",
+      "baseline": "C",
+      "lora": "E"
+    },
+    {
+      "expected": "E",
+      "baseline": "D",
+      "lora": "E"
+    }
+  ]
+}

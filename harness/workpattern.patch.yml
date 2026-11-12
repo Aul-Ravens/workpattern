@@ -1,0 +1,19 @@
+- id: agent-default-model
+  config:
+    provider: workpattern-local
+    model: workpattern-triage
+- id: llm-pi-ai
+  config:
+    providers:
+      workpattern-local:
+        api: openai-completions
+        apiKeyEnv: WORKPATTERN_HARNESS_KEY
+        baseURL: http://127.0.0.1:8765/v1
+        models:
+          - id: workpattern-triage
+            name: WorkPattern Feedback Triage
+            contextWindow: 1024
+            maxTokens: 512
+            input: [text]
+- id: session-telemetry-otel
+  disabled: true
