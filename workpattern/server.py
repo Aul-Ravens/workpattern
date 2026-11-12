@@ -14,6 +14,8 @@ from .model import BASE_ID, BUNDLED_ADAPTER, MAX_FEEDBACK, MODEL_DIR, ROOT, Clas
 from .playbook import ROUTES, SAMPLES, workflow
 
 MODEL_NAME = "workpattern-triage"
+PAGES_ORIGIN = "https://aul-ravens.github.io"
+PAGES_API = {"/api/config": "GET", "/api/triage": "POST"}
 HARNESS_FEEDBACK = re.compile(r"<workpattern-feedback>(.*?)</workpattern-feedback>", re.DOTALL)
 ASSETS = {
     "/": ("index.html", "text/html; charset=utf-8"),
@@ -48,6 +50,10 @@ def handler_for(model, adapter):
             self.send_header("Content-Length", str(len(body)))
             self.send_header("Cache-Control", "no-store")
             self.send_header("X-Content-Type-Options", "nosniff")
+            if self.path in PAGES_API:
+                self.send_header("Vary", "Origin")
+                if self.headers.get("Origin") == PAGES_ORIGIN:
+                    self.send_header("Access-Control-Allow-Origin", PAGES_ORIGIN)
             self.end_headers()
             self.wfile.write(body)
 
@@ -56,6 +62,24 @@ def handler_for(model, adapter):
 
         def fail(self, message, status):
             self.send_json({"error": {"message": message}}, status)
+
+        def do_OPTIONS(self):
+            method = PAGES_API.get(self.path)
+            if (
+                not method
+                or self.headers.get("Origin") != PAGES_ORIGIN
+                or self.headers.get("Access-Control-Request-Method") != method
+            ):
+                self.fail("此来源无法调用接口。", 403)
+                return
+            self.send_response(204)
+            self.send_header("Vary", "Origin, Access-Control-Request-Method, Access-Control-Request-Private-Network")
+            self.send_header("Access-Control-Allow-Origin", PAGES_ORIGIN)
+            self.send_header("Access-Control-Allow-Methods", method)
+            self.send_header("Access-Control-Allow-Headers", "Content-Type")
+            if self.headers.get("Access-Control-Request-Private-Network") == "true":
+                self.send_header("Access-Control-Allow-Private-Network", "true")
+            self.end_headers()
 
         def do_GET(self):
             if self.path in ASSETS:
@@ -77,8 +101,13 @@ def handler_for(model, adapter):
                 self.fail("接口不存在。", 404)
                 return
             origin = self.headers.get("Origin")
-            if origin and origin not in {f"http://127.0.0.1:{self.server.server_port}", f"http://localhost:{self.server.server_port}"}:
-                self.fail("请从本机应用提交反馈。", 403)
+            local_origins = {f"http://127.0.0.1:{self.server.server_port}", f"http://localhost:{self.server.server_port}"}
+            pages_request = origin == PAGES_ORIGIN and self.path == "/api/triage"
+            if origin and origin not in local_origins and not pages_request:
+                self.fail("请从 WorkPattern 工作台提交反馈。", 403)
+                return
+            if pages_request and self.headers.get_content_type() != "application/json":
+                self.fail("请求必须采用 application/json 格式。", 415)
                 return
             try:
                 size = int(self.headers.get("Content-Length", 0))

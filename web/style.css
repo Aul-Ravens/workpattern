@@ -31,6 +31,11 @@ h1 { font-size: clamp(2.2rem, 5vw, 3.55rem); line-height: 1.22; letter-spacing: 
 .intro p { color: var(--muted); margin-top: 14px; max-width: 680px; }
 .board { display: grid; grid-template-columns: 1fr 1.1fr; gap: 20px; align-items: start; }
 .panel { min-width: 0; border: 1px solid var(--border); border-radius: 18px; background: #fff; padding: 25px; }
+.connect-panel { display: flex; justify-content: space-between; gap: 20px; align-items: center; margin-bottom: 20px; }
+.connect-panel #connect-help { margin-top: 6px; color: var(--muted); font-size: .88rem; }
+.connect-actions { display: flex; flex: none; flex-wrap: wrap; align-items: center; gap: 10px 14px; }
+.connect-actions .primary { width: auto; }
+.connect-actions a { font-size: .82rem; color: var(--green); }
 h2 { font-size: 1.14rem; }
 .intake h2 { margin-bottom: 17px; }
 textarea { display: block; width: 100%; min-height: 188px; resize: vertical; padding: 15px; background: #fbfcf9; color: inherit; border: 1px solid var(--border); border-radius: 11px; line-height: 1.65; }
@@ -67,5 +72,6 @@ summary { width: fit-content; cursor: pointer; color: var(--green); }
   .intro { padding-block: 34px 25px; }
   .board { grid-template-columns: 1fr; }
   .panel { padding: 19px; }
+  .connect-panel { align-items: flex-start; flex-direction: column; }
   .empty { min-height: 170px; }
 }

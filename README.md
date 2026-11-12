@@ -2,6 +2,8 @@
 
 WorkPattern 帮产品运营和客服把一条用户反馈交到合适的处理流程。它用本地模型判断下一步，给出对应的执行清单。处理人可以改判、勾选已完成步骤，并导出 Markdown 记录。
 
+[打开 GitHub Pages 工作台](https://aul-ravens.github.io/workpattern/)
+
 ## 产品场景
 
 值班同学常常同时收到故障、已有缺陷和改进建议。相似描述可能需要完全不同的处理动作。例如，某个版本的导出功能异常可以先复现并建单，订单提交大面积失败时应先启动故障响应。WorkPattern 把产品负责人的判断准则写成带标签的历史案例，并把每种决定绑定到一份执行清单。
@@ -27,7 +29,11 @@ py -3.13 -m venv .venv
 .venv/Scripts/python.exe -m workpattern.server
 ```
 
-打开 [本机工作台](http://127.0.0.1:8765)。首次启动会下载约 1 GB 的基座权重，仓库内已附训练好的 LoRA 适配器。支持指定 `--device cpu` 进行 CPU 推理。
+首次启动会下载约 1 GB 的基座权重，仓库内已附训练好的 LoRA 适配器。支持指定 `--device cpu` 进行 CPU 推理。Windows 已完成依赖安装时，可双击 `start.cmd` 启动。
+
+在运行模型的同一台电脑上打开 [GitHub Pages 工作台](https://aul-ravens.github.io/workpattern/)，点击「连接本地模型」。如果浏览器询问是否允许站点访问本地网络，请选择允许。遇到浏览器限制时，可打开 [本机工作台](http://127.0.0.1:8765/)。
+
+GitHub Pages 提供网页文件。页面把反馈直接发送到本机的 `127.0.0.1:8765`，模型和推理服务运行在本机。公开页面可以访问，执行分流需要在访问者自己的电脑上启动 WorkPattern。
 
 如需读取外置模型，在启动前设置 `WORKPATTERN_MODEL_DIR` 为模型根目录，或在仓库根目录建立 `settings.local.json` 并填写 `model_dir`。基座文件放在模型根目录的 `qwen/`，重新训练得到的适配器默认写入 `adapter/`。
 

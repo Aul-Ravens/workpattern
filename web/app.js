@@ -3,6 +3,11 @@ const feedback = byId("feedback");
 const run = byId("run");
 const override = byId("override");
 const error = byId("error");
+const hosted = location.hostname === "aul-ravens.github.io";
+const connectPanel = byId("connect-panel");
+const connectButton = byId("connect");
+const connectError = byId("connect-error");
+const status = byId("connection");
 let config;
 let current;
 let modelRoute;
@@ -48,13 +53,26 @@ function showError(message) {
   error.hidden = !message;
 }
 
+function apiFetch(path, options = {}) {
+  const request = {...options, credentials: "omit", redirect: "error"};
+  if (hosted) {
+    request.targetAddressSpace = "loopback";
+    return fetch(`http://127.0.0.1:8765${path}`, request);
+  }
+  return fetch(path, request);
+}
+
 async function initialize() {
+  connectButton.disabled = true;
+  connectError.hidden = true;
+  status.textContent = "正在连接本地模型";
   try {
-    const response = await fetch("/api/config");
+    const response = await apiFetch("/api/config");
     if (!response.ok) throw new Error();
     config = await response.json();
     feedback.maxLength = config.max_feedback;
     updateCount();
+    byId("samples").replaceChildren();
     for (const [title, content] of config.samples) {
       const button = document.createElement("button");
       button.type = "button";
@@ -66,26 +84,42 @@ async function initialize() {
       });
       byId("samples").append(button);
     }
+    override.replaceChildren();
     for (const route of config.routes) {
       override.add(new Option(route.title, route.code));
     }
-    const status = byId("connection");
+    if (current) override.value = current.code;
     status.classList.add("ready");
     status.textContent = `本地模型 · ${config.device === "cuda" ? "GPU" : "CPU"}`;
     const evaluation = config.evaluation;
+    byId("evaluation").hidden = !evaluation;
     if (evaluation) {
       const p = document.createElement("p");
       p.textContent = `${evaluation.eval_examples} 条合成测试反馈，基座答对 ${evaluation.baseline.correct} 条，LoRA 答对 ${evaluation.lora.correct} 条。`;
-      byId("metrics").append(p);
-      byId("evaluation").hidden = false;
+      byId("metrics").replaceChildren(p);
     }
+    connectPanel.hidden = true;
+    showError("");
     run.disabled = false;
   } catch {
-    byId("connection").textContent = "本地模型未连接";
-    showError("启动本地服务后刷新页面。");
+    disconnect();
+  } finally {
+    connectButton.disabled = false;
   }
 }
 
+function disconnect() {
+  status.classList.remove("ready");
+  status.textContent = "本地模型未连接";
+  connectPanel.hidden = false;
+  connectError.textContent = hosted
+    ? "请确认本机服务已启动，且当前站点可访问本地网络。也可直接打开本机入口。"
+    : "请启动 WorkPattern 本地服务，然后重新连接。";
+  connectError.hidden = false;
+  run.disabled = true;
+}
+
+connectButton.addEventListener("click", initialize);
 feedback.addEventListener("input", updateCount);
 byId("clear").addEventListener("click", () => {
   feedback.value = "";
@@ -104,22 +138,23 @@ byId("triage-form").addEventListener("submit", async (event) => {
   run.disabled = true;
   run.firstChild.textContent = "正在分流 ";
   try {
-    const response = await fetch("/api/triage", {
+    const response = await apiFetch("/api/triage", {
       method: "POST",
       headers: {"Content-Type": "application/json"},
       body: JSON.stringify({feedback: input}),
     });
     const payload = await response.json();
-    if (!response.ok) throw new Error(payload.error.message);
+    if (!response.ok) throw new Error(payload.error?.message || "本地服务返回了错误。");
     submittedFeedback = input;
     modelRoute = payload.workflow;
     renderWorkflow(modelRoute);
     byId("latency").textContent = `${payload.elapsed_ms} ms`;
   } catch (exception) {
-    showError(exception instanceof TypeError ? "连接本地服务失败，请重试。" : exception.message);
+    if (exception instanceof TypeError) disconnect();
+    else showError(exception.message);
   } finally {
     run.firstChild.textContent = "分析反馈 ";
-    run.disabled = false;
+    run.disabled = !connectPanel.hidden;
   }
 });
 
@@ -143,4 +178,5 @@ byId("download").addEventListener("click", () => {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 
-initialize();
+if (hosted) connectPanel.hidden = false;
+else initialize();
