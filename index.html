@@ -4,21 +4,34 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f7f8f4">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' http://127.0.0.1:8765; base-uri 'none'; object-src 'none'; form-action 'none'">
   <title>WorkPattern · 反馈分流工作台</title>
-  <link rel="stylesheet" href="/style.css">
-  <script src="/app.js" defer></script>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
 </head>
 <body>
   <header class="bar">
     <div class="bar-content">
       <span class="brand"><span class="mark" aria-hidden="true">W</span> WorkPattern</span>
-      <span class="connection" id="connection" role="status">正在连接本地模型</span>
+      <span class="connection" id="connection" role="status">本地模型未连接</span>
     </div>
   </header>
   <main>
     <section class="intro" aria-labelledby="title">
       <h1 id="title">反馈分流工作台</h1>
       <p>输入一条用户反馈。模型按产品负责人的处理准则分流，你可以复核判断并跟进处理步骤。</p>
+    </section>
+    <section id="connect-panel" class="panel connect-panel" aria-labelledby="connect-title" hidden>
+      <div>
+        <h2 id="connect-title">连接本地模型</h2>
+        <p id="connect-help">请先在本机启动 WorkPattern。浏览器提示访问本地网络时，选择允许。</p>
+        <p id="connect-error" class="error" role="alert" hidden></p>
+      </div>
+      <div class="connect-actions">
+        <button id="connect" class="primary" type="button">连接本地模型</button>
+        <a href="https://github.com/Aul-Ravens/workpattern#本机运行">启动说明</a>
+        <a href="http://127.0.0.1:8765/">本机入口</a>
+      </div>
     </section>
     <div class="board">
       <section class="panel intake" aria-labelledby="intake-title">
