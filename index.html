@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8f4">
+  <title>WorkPattern · 反馈分流工作台</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="bar">
+    <div class="bar-content">
+      <span class="brand"><span class="mark" aria-hidden="true">W</span> WorkPattern</span>
+      <span class="connection" id="connection" role="status">正在连接本地模型</span>
+    </div>
+  </header>
+  <main>
+    <section class="intro" aria-labelledby="title">
+      <h1 id="title">反馈分流工作台</h1>
+      <p>输入一条用户反馈。模型按产品负责人的处理准则分流，你可以复核判断并跟进处理步骤。</p>
+    </section>
+    <div class="board">
+      <section class="panel intake" aria-labelledby="intake-title">
+        <h2 id="intake-title">反馈内容</h2>
+        <form id="triage-form">
+          <label class="sr-only" for="feedback">反馈内容</label>
+          <textarea id="feedback" maxlength="500" placeholder="描述用户遇到的情况，附上影响范围、复现条件或已有工单。" required></textarea>
+          <div class="input-meta"><span id="count">0 / 500</span><button type="button" class="text-button" id="clear">清空</button></div>
+          <div id="samples" class="samples" aria-label="示例反馈"></div>
+          <button type="submit" class="primary" id="run" disabled>分析反馈 <span aria-hidden="true">→</span></button>
+          <p class="error" id="error" role="alert" hidden></p>
+        </form>
+      </section>
+      <section class="panel result" aria-labelledby="result-title">
+        <div class="panel-head">
+          <h2 id="result-title">处理流程</h2>
+          <span id="latency"></span>
+        </div>
+        <div id="empty" class="empty">
+          <span class="list-icon" aria-hidden="true"><i></i><i></i><i></i></span>
+          <p>提交反馈后，这里会显示处理步骤。</p>
+        </div>
+        <div id="workflow" hidden>
+          <div class="decision">
+            <h3 id="decision-title"></h3>
+            <p id="criterion"></p>
+          </div>
+          <label class="override">复核分流 <select id="override"></select></label>
+          <div id="steps"></div>
+          <div class="result-actions"><span id="progress" aria-live="polite"></span><button id="download" class="secondary">导出记录</button></div>
+        </div>
+      </section>
+    </div>
+    <details id="evaluation" class="evaluation" hidden>
+      <summary>模型评测</summary>
+      <div id="metrics"></div>
+    </details>
+  </main>
+</body>
+</html>
