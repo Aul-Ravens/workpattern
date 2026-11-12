@@ -1,0 +1,20 @@
+{"route":"A","language":"en","feedback":"The payroll export completes with a success badge, but new files contain bank details for workers in unrelated companies. One outside customer has already downloaded a file and the job still runs every ten minutes."}
+{"route":"A","language":"en","feedback":"The public API is returning timeouts on all write requests in every region. Read requests still work, but clients cannot save any changes and failover has also timed out."}
+{"route":"B","language":"en","feedback":"Two testers can make the app close by rotating a Pixel phone during video playback. It happens on the beta build only. The current production build plays the same video normally."}
+{"route":"B","language":"en","feedback":"The report says this is the old badge issue. That issue concerns missing badges on web profiles. Support reproduced a different problem on the Android app where tapping the badge opens the wrong help article."}
+{"route":"C","language":"en","feedback":"The purchasing team can find the right vendor using search. They want pinned suppliers at the top because they reorder from the same five vendors several times a day."}
+{"route":"C","language":"en","feedback":"A request asks for a receipt preview before sending it. Sending works and has no reported errors. The accountant wants to catch misspelled company names before receipts reach customers."}
+{"route":"D","language":"en","feedback":"The ticket owner checked the new trace and confirmed it matches RPT-603, where the quarterly chart label disappears with the same date filter. The patch is already in review. This report adds a second trace."}
+{"route":"D","language":"en","feedback":"A tenant found the same icon overlap in the compact layout on build 12. The design lead confirmed it is covered by active issue DES-20 and still affects only that layout."}
+{"route":"E","language":"en","feedback":"A support handover marks a customer issue critical and attaches a recording that cannot be opened. The only note is 'still blocked', with no task, screen, or error text."}
+{"route":"E","language":"en","feedback":"An executive mentioned that onboarding needs attention. Nobody can tell which step caused friction, who encountered it, or what the desired outcome is."}
+{"route":"A","language":"zh","feedback":"消息界面仍显示发送成功，但后台审计发现付费客户的收件地址被串到其他客户，发送任务仍在执行，已有外部收件人收到私密附件。"}
+{"route":"A","language":"zh","feedback":"九个分拨中心的司机都无法接收线路更新，调度台转发和备用电话同步均失败。今天的车队仍在等待路线。"}
+{"route":"B","language":"zh","feedback":"检测到在 125% 系统缩放下点开草稿时，工具栏压住最后一项。研发在两台同配置设备验证，切回 100% 即可继续。"}
+{"route":"B","language":"zh","feedback":"客户把现象归到已知的上传超时，支持同事复现后确认其实是文件名含问号时才报错。改名可上传，其他文件没受影响。"}
+{"route":"C","language":"zh","feedback":"运动场预约可以正常完成。教练希望能复制上个月的固定时段，因为每周的训练安排几乎相同。"}
+{"route":"C","language":"zh","feedback":"投递简历目前符合设计，每次选一个岗位。招聘方希望人才池支持保存常用搜索条件，避免每周重新搭筛选。"}
+{"route":"D","language":"zh","feedback":"今天又收到平板端同样的按钮抖动。支持人员核对屏幕尺寸和操作路径，确认正在修复的 MBL-17 已涵盖，问题仍限同一分辨率。"}
+{"route":"D","language":"zh","feedback":"第二个卖家提交标签打印错位录屏。工单负责人确认与 LABEL-55 的纸张尺寸、步骤和结果完全一致，原单继续跟踪。"}
+{"route":"E","language":"zh","feedback":"群里说‘客户那边今天又不行了’，没有产品名、操作时间或录屏，暂时也找不到谁最先反馈。"}
+{"route":"E","language":"zh","feedback":"有人提议优化提醒，但表格只有一句‘应该更好’，没有用户群、提醒场景或需要达成的目标。"}

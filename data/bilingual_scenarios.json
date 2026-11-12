@@ -1,0 +1,224 @@
+{
+  "contexts": [
+    {
+      "zh": [
+        "预约挂号",
+        "确认页返回空白",
+        "按时段批量改约",
+        "管理员每天要逐条调整几十个预约"
+      ],
+      "en": [
+        "appointment booking",
+        "the confirmation screen goes blank",
+        "bulk rescheduling by time slot",
+        "administrators adjust dozens of appointments one at a time every day"
+      ]
+    },
+    {
+      "zh": [
+        "员工排班",
+        "保存后变更没有生效",
+        "复制整周排班",
+        "主管每周都要重新录入相同班次"
+      ],
+      "en": [
+        "staff scheduling",
+        "saved changes do not take effect",
+        "copying a whole weekly schedule",
+        "supervisors enter the same shifts every week"
+      ]
+    },
+    {
+      "zh": [
+        "包裹签收",
+        "确认签收后状态仍显示待处理",
+        "按配送区汇总",
+        "配送员每晚要手工汇总各区域进度"
+      ],
+      "en": [
+        "delivery confirmation",
+        "confirmed packages still show as pending",
+        "a summary by delivery zone",
+        "couriers manually compile progress for each zone every night"
+      ]
+    },
+    {
+      "zh": [
+        "活动报名",
+        "提交后无法打开报名记录",
+        "一键复制活动设置",
+        "团队每月要手工搭建相同的报名表"
+      ],
+      "en": [
+        "event registration",
+        "the registration record will not open after submission",
+        "copying event settings in one click",
+        "the team rebuilds the same form every month"
+      ]
+    },
+    {
+      "zh": [
+        "差旅报销",
+        "上传凭证后弹出错误提示",
+        "按项目批量审阅",
+        "财务只能逐笔核对同一项目的单据"
+      ],
+      "en": [
+        "expense submission",
+        "uploading a receipt produces an error",
+        "reviewing submissions by project in batches",
+        "finance has to review receipts for the same project individually"
+      ]
+    },
+    {
+      "zh": [
+        "设施巡检",
+        "提交后记录列表一直不刷新",
+        "按楼层筛选检查项",
+        "巡检人员每次都要浏览整栋楼的任务列表"
+      ],
+      "en": [
+        "facility inspections",
+        "the inspection list does not refresh after submission",
+        "filtering checks by floor",
+        "inspectors scroll through the entire building's tasks on every round"
+      ]
+    },
+    {
+      "zh": [
+        "资料审核",
+        "切换页面后选项被清空",
+        "按队列设定默认选项",
+        "审核人员一天要重复设置几十次"
+      ],
+      "en": [
+        "document review",
+        "selections disappear when switching pages",
+        "setting defaults per queue",
+        "reviewers repeat the same settings dozens of times a day"
+      ]
+    },
+    {
+      "zh": [
+        "设备借用",
+        "提交申请后未显示审批人",
+        "按团队保存常用设备列表",
+        "员工反复搜索同样的设备"
+      ],
+      "en": [
+        "equipment reservations",
+        "the approver is missing after a request is submitted",
+        "saving common equipment by team",
+        "employees repeatedly look up the same items"
+      ]
+    },
+    {
+      "zh": [
+        "售后维修",
+        "保存检测结果时返回错误",
+        "自动汇总同一设备的维修记录",
+        "工程师需要翻查多个页面才能了解历史"
+      ],
+      "en": [
+        "repair intake",
+        "saving a diagnostic result returns an error",
+        "a consolidated repair history per device",
+        "engineers need to search several pages for a device's history"
+      ]
+    },
+    {
+      "zh": [
+        "配送交班",
+        "交班清单无法加载",
+        "按站点导出交班清单",
+        "站长每天都要手工拆分清单"
+      ],
+      "en": [
+        "dispatch handoff",
+        "the handoff checklist fails to load",
+        "exporting checklists by depot",
+        "depot managers split up the checklist manually every day"
+      ]
+    }
+  ],
+  "templates": {
+    "zh": {
+      "A": [
+        "旧单 SR-{ticket} 只影响一台设备。今天{area}再次出现{symptom}，五个站点都无法完成核心操作，备用入口也失败，影响正在扩大。",
+        "大家仍能打开{area}，但后台显示新记录正在被错误覆盖。已经确认六条数据丢失，仍有新写入受影响。",
+        "有人称这是{area}的改进建议。实际是发布后所有班组同时出现{symptom}，核心业务已中断，重试无效。"
+      ],
+      "B": [
+        "支持同事已在一个试点账号复现{area}的{symptom}，只影响旧版本，改用网页端可以继续。",
+        "用户猜测和 SR-{ticket} 有关，但旧单只在批量操作时出现。现在{area}逐条处理时出现{symptom}，同事按录屏稳定复现，影响仅限一组。",
+        "用户把{area}提交为功能建议。核对原设计应能正常完成，实际出现{symptom}。只有单台设备复现，其他设备可用。"
+      ],
+      "C": [
+        "现有{area}按设计运行。用户想要{feature}，因为{need}，每周都要额外花时间处理。",
+        "客户把{area}标记为严重问题。现场复核系统正常，他们希望增加{feature}，主要因为{need}。",
+        "团队建议在{area}支持{feature}。当前可以完成任务，但{need}。没有异常或失败记录。"
+      ],
+      "D": [
+        "新录屏确认{area}仍出现{symptom}，同一版本和操作顺序与处理中 SR-{ticket} 完全一致，只新增一条证据。",
+        "有人担心{area}再次故障，研发确认只是 SR-{ticket} 的另一条反馈。同一触发条件、同一症状，影响范围未变化。",
+        "新工单描述{area}的{symptom}，与已确认的 SR-{ticket} 同根因。原单有负责人，影响仍限原先的一组用户。"
+      ],
+      "E": [
+        "群里有人说{area}坏了，猜测和 SR-{ticket} 一样。只有转述，缺少操作步骤、具体症状和发生时间。",
+        "工单给{area}勾了最高优先级，正文只有‘急，弄不了’。没有出错环节、影响范围或截图。",
+        "用户说希望优化{area}。没有说明要完成的任务、遇到的困难或想实现什么结果。"
+      ]
+    },
+    "en": {
+      "A": [
+        "SR-{ticket} previously affected one device. In {area}, {symptom} now happens at five sites and nobody can complete the core task. The backup path fails too.",
+        "People can still open {area}, but new records are being overwritten incorrectly. Six confirmed records have already been lost and the corruption is ongoing.",
+        "Someone filed this as an improvement to {area}. Since the release, every shift reports the same failure: {symptom}. The core task is blocked and retries do not help."
+      ],
+      "B": [
+        "Support reproduced a problem with {area}: {symptom}. It affects one pilot account on an older version and the web client works.",
+        "The reporter mentions SR-{ticket}, but that ticket only happens in bulk mode. In {area}, {symptom} occurs when processing a single item. We reproduced it from the recording and it affects one team.",
+        "A customer called this a feature request. The current design for {area} should work, but {symptom}. We reproduced it on one device and the other devices are fine."
+      ],
+      "C": [
+        "The current {area} flow works as designed. Users ask for {feature} because {need}. It costs the team time each week.",
+        "A customer marked {area} as a severe issue. The team verified that it works today. They want {feature} because {need}.",
+        "The team proposes {feature} for {area}. They can finish the task today, but {need}. There is no failed operation to reproduce."
+      ],
+      "D": [
+        "A new recording shows that in {area}, {symptom}. The release and exact steps match open SR-{ticket}. This adds one more example and the impact is unchanged.",
+        "Support worried that {area} had broken again. Engineering confirmed the new report is another occurrence of SR-{ticket}, with the same trigger, symptom, and scope.",
+        "The new report says that in {area}, {symptom}. The owner confirmed it is the same cause as SR-{ticket}, still limited to the original group."
+      ],
+      "E": [
+        "Someone in chat said {area} is broken and guessed it might be SR-{ticket}. We only have a forwarded message with no steps, symptoms, or time.",
+        "A ticket marks {area} as highest priority and says only 'urgent, cannot do it'. It gives no failure point, affected users, or screenshot.",
+        "A customer says {area} should be improved. There is no description of the task, what gets in the way, or the intended result."
+      ]
+    }
+  },
+  "followup_templates": {
+    "zh": {
+      "A": [
+        "安全审计发现{area}的保密资料可以被陌生账号读到。界面没有提示，权限变更仍在扩散，已有异常访问记录。"
+      ],
+      "D": [
+        "第两个客户也报告{area}出现{symptom}。当班人员对照截图和配置，确认原来的缺陷 SR-{ticket} 已覆盖，仍只在相同设置下发生。"
+      ],
+      "E": [
+        "负责人只转来一句‘它又挂了，马上处理’，怀疑是{area}。没人知道用户点了什么，或是否还有其他人受影响。"
+      ]
+    },
+    "en": {
+      "A": [
+        "An audit found that confidential records in {area} became accessible to unrelated accounts. The interface looks normal, but the access changes are spreading and the logs show unauthorized reads."
+      ],
+      "D": [
+        "A second customer reports that in {area}, {symptom}. The on-call lead compared screenshots and settings and confirmed the open defect SR-{ticket} covers this report. It still occurs only under the original setting."
+      ],
+      "E": [
+        "A lead forwarded 'it's broken again, fix immediately' and guessed it was {area}. Nobody knows what the customer clicked or whether any other user is affected."
+      ]
+    }
+  }
+}

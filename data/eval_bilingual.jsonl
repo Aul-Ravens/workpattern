@@ -1,0 +1,40 @@
+{"route":"A","language":"en","feedback":"An old ticket describes an occasional login delay on one terminal. This morning the same warning appeared across every kiosk at six branches, and customers cannot check in at all. The manual path also times out."}
+{"route":"A","language":"en","feedback":"The subscription renewal screen says everything is fine, but billing reconciliation shows nine duplicate charges and the job is still creating more."}
+{"route":"A","language":"en","feedback":"Video uploads are failing for nearly all creators after the encoding rollout. Every fallback region is rejecting jobs and the live queue is growing."}
+{"route":"A","language":"en","feedback":"The migration dashboard turned green, but auditors are seeing previously valid project permissions replaced with public access as the migration continues."}
+{"route":"B","language":"en","feedback":"The agent thinks this is ticket SUP-44. That ticket only affects the web login prompt. This report reproduces a crash in the iPad app when entering an email alias. Only a pilot customer is affected and browser login works."}
+{"route":"B","language":"en","feedback":"The dashboard's Print button drops the last line on Firefox with a landscape page. Three people have reproduced it. Exporting a PDF remains available."}
+{"route":"B","language":"en","feedback":"A user filed a feature request to keep language preferences after signing out. The preference is already supposed to persist. Support can reproduce the reset on one beta device and sees no wider impact."}
+{"route":"B","language":"en","feedback":"Selecting a saved filter on the calendar shows an empty list only when the device is set to UTC+13. We have a recording and repeatable steps. A manual date range returns the right data."}
+{"route":"C","language":"en","feedback":"Support labeled this a bug, but the price sheet downloads exactly as designed. Account managers need a column for renewal date so they can identify which customers to contact first."}
+{"route":"C","language":"en","feedback":"Night-shift coordinators copy the same handover notes into several channels every day. They want a shared template with a field for exceptions."}
+{"route":"C","language":"en","feedback":"The lab can currently approve one specimen at a time. They ask to approve a batch of routine specimens so the team can clear the queue before shift change."}
+{"route":"C","language":"en","feedback":"The search tool already returns the correct results. A teaching team wants to save common searches for new students so they do not have to reconstruct filters in every session."}
+{"route":"D","language":"en","feedback":"A new support call includes an example of the same chart legend disappearing at 125% zoom. The engineer verified the browser, zoom level, and symptom are identical to OPEN-516. No change in scope."}
+{"route":"D","language":"en","feedback":"Another customer has the pending banner after selecting the same archived theme. Design matched the recording and account state to active ticket UX-208, which is already assigned."}
+{"route":"D","language":"en","feedback":"We received an extra log from a single test user. It shows the exact timeout and certificate condition already tracked in DEV-931. The fix is under review and there is no new behavior."}
+{"route":"D","language":"en","feedback":"Ticket QA-73 covers the missing image after editing a draft on version 4.6. A second reporter supplied the same steps and screenshot on 4.6. The support lead confirmed that the existing ticket covers it."}
+{"route":"E","language":"en","feedback":"A manager forwarded 'the thing is down again, critical'. They do not know which screen was involved or whether more than one person saw it."}
+{"route":"E","language":"en","feedback":"The form says 'probably ENG-208' but does not include the action, behavior, device, or a reproduction attempt."}
+{"route":"E","language":"en","feedback":"A customer wants the membership tools to be better. No task, objective, example, or contact was given in the forwarded message."}
+{"route":"E","language":"en","feedback":"The report contains a blurry image and the words 'please fix today'. The team cannot identify the affected product area, expected result, or time."}
+{"route":"A","language":"zh","feedback":"昨晚的旧单只影响一个机房的测试租户。今天同样的报错已出现在所有正式租户，短信通道完全停发，备用供应商也在报错。"}
+{"route":"A","language":"zh","feedback":"平台表面上还能上传文件，但权限审计发现新上传的私有合同被自动标为公开，已有未授权的访问记录且仍在增加。"}
+{"route":"A","language":"zh","feedback":"比赛检录开始后，全部校区的闸机都读取不到今天的名单，人工查询入口也不可用，现场队列持续拉长。"}
+{"route":"A","language":"zh","feedback":"商家以为只是退款文案需要调整。对账发现同一次退款在多个账户被重复执行，任务还在继续跑。"}
+{"route":"B","language":"zh","feedback":"看起来像已知的网页预览空白，但这次是在桌面客户端导入带空格的路径时失败，研发按录屏已复现。只有一个试点客户遇到，拖拽导入仍然正常。"}
+{"route":"B","language":"zh","feedback":"特定分辨率下，测验答题页最后一个选项被底栏盖住。客服已用相同设备验证，旋转屏幕后可以继续答题。"}
+{"route":"B","language":"zh","feedback":"有同事建议增加上传成功提醒。设计稿显示提醒本来就有，测试发现只在低网速时上传完成后漏显示，数据保存正常。"}
+{"route":"B","language":"zh","feedback":"两台带旧浏览器的公共终端预览打印时少一页。团队拿到了复现步骤，更新浏览器或直接下载文档可以绕开。"}
+{"route":"C","language":"zh","feedback":"工会希望按志愿活动保存常用报名条件，省去每次重新填写。现在报名功能正常，团队每周开两三场同类型活动。"}
+{"route":"C","language":"zh","feedback":"客户将定时汇总标成故障，核查发现现行规则按日生成符合设计。客户想增加按班次统计，因为每班交接时要核对当班结果。"}
+{"route":"C","language":"zh","feedback":"实验室目前只能一条条提交留样记录。功能符合原规则，值班人希望按同一批次统一提交以减少下班前的排队。"}
+{"route":"C","language":"zh","feedback":"审核组想把常用筛选条件共享给新同事，避免每次培训都手把手重配。个人保存条件已经可以正常使用。"}
+{"route":"D","language":"zh","feedback":"同一个字号设置下，第二个客户也遇到打印页脚重叠。客服核对版本、操作路径和截图后确认属于处理中缺陷 PRINT-18，影响仍限该设置。"}
+{"route":"D","language":"zh","feedback":"新同事报了按钮禁用问题。测试确认与已有 TKT-47 的权限组合完全吻合，原单负责人正在处理，可以补充这次的日志。"}
+{"route":"D","language":"zh","feedback":"供应商反馈定时任务少跑一次。研发确认与已定位的 JOB-809 同一时间窗口、同一触发规则，未发现新的影响。"}
+{"route":"D","language":"zh","feedback":"今天多收到一段仪表盘闪烁的视频，和 VIS-202 使用同一浏览器、缩放比例与操作步骤。原单仍在跟踪，范围没有扩展。"}
+{"route":"E","language":"zh","feedback":"销售称老客户要求马上解决，工单里只写了‘还是打不开’，缺少页面名称、时间和账号。"}
+{"route":"E","language":"zh","feedback":"转发截图说疑似 PUB-73 再现，但图片没有拍到具体界面，提报人未写触发条件或实际表现。"}
+{"route":"E","language":"zh","feedback":"反馈勾选了最高等级，只有‘同步不对’四个字，团队还不知道是哪类对象、从哪里同步到哪里。"}
+{"route":"E","language":"zh","feedback":"群里提到希望加强移动端，需求记录没有用户目标，也没有写遇到了什么困难。"}

@@ -10,7 +10,7 @@ from threading import Lock
 
 import torch
 
-from .model import BASE_ID, BUNDLED_ADAPTER, MAX_FEEDBACK, MODEL_DIR, ROOT, Classifier
+from .model import BUNDLED_ADAPTER, MAX_FEEDBACK, MODEL_DIR, ROOT, Classifier
 from .playbook import ROUTES, SAMPLES, workflow
 
 MODEL_NAME = "workpattern-triage"
@@ -93,7 +93,7 @@ def handler_for(model, adapter):
             elif self.path == "/api/config":
                 self.send_json({
                     "samples": SAMPLES, "routes": [workflow(code) for code in ROUTES],
-                    "model": BASE_ID, "device": model.device, "max_feedback": MAX_FEEDBACK,
+                    "model": model.base_id, "device": model.device, "max_feedback": MAX_FEEDBACK,
                     "evaluation": {key: report[key] for key in ("eval_examples", "baseline", "lora")} if report else None,
                 })
             elif self.path == "/v1/models":

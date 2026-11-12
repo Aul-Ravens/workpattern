@@ -1,211 +1,1303 @@
 {
-  "base_model": "Qwen/Qwen2.5-0.5B-Instruct",
-  "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "base_model": "Qwen/Qwen2.5-1.5B-Instruct",
+  "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
+  "previous_base_model": "Qwen/Qwen2.5-0.5B-Instruct",
   "gpu": "NVIDIA GeForce RTX 5070 Ti Laptop GPU",
   "torch_version": "2.7.1+cu128",
   "seed": 42,
-  "train_examples": 300,
-  "eval_examples": 25,
-  "epochs": 4,
+  "train_examples": 660,
+  "eval_examples": 85,
+  "epochs": 1,
   "batch_size": 8,
-  "trainable_parameters": 1081344,
-  "peak_allocated_vram_mib": 3292,
-  "elapsed_seconds": 24.2,
+  "continued_training": true,
+  "learning_rate": 3.5E-05,
+  "trainable_parameters": 2179072,
+  "peak_allocated_vram_mib": 7816,
+  "elapsed_seconds": 31.7,
   "epoch_loss": [
-    0.7768,
-    0.0145,
-    0.0246,
-    0.0121
+    0.0179
   ],
-  "baseline": {
-    "correct": 7,
-    "accuracy": 0.28,
-    "macro_f1": 0.2232,
+  "previous": {
+    "correct": 70,
+    "accuracy": 0.8235,
+    "macro_f1": 0.818,
     "per_route": {
       "A": {
-        "support": 5,
-        "correct": 0,
-        "f1": 0.0
+        "support": 17,
+        "correct": 13,
+        "f1": 0.8387
       },
       "B": {
-        "support": 5,
-        "correct": 4,
+        "support": 17,
+        "correct": 14,
         "f1": 0.8
       },
       "C": {
-        "support": 5,
-        "correct": 3,
-        "f1": 0.3158
+        "support": 17,
+        "correct": 16,
+        "f1": 0.8421
       },
       "D": {
-        "support": 5,
+        "support": 17,
+        "correct": 10,
+        "f1": 0.7143
+      },
+      "E": {
+        "support": 17,
+        "correct": 17,
+        "f1": 0.8947
+      }
+    }
+  },
+  "baseline": {
+    "correct": 53,
+    "accuracy": 0.6235,
+    "macro_f1": 0.5519,
+    "per_route": {
+      "A": {
+        "support": 17,
+        "correct": 17,
+        "f1": 0.85
+      },
+      "B": {
+        "support": 17,
+        "correct": 16,
+        "f1": 0.6275
+      },
+      "C": {
+        "support": 17,
+        "correct": 8,
+        "f1": 0.6154
+      },
+      "D": {
+        "support": 17,
         "correct": 0,
         "f1": 0.0
       },
       "E": {
-        "support": 5,
-        "correct": 0,
-        "f1": 0.0
+        "support": 17,
+        "correct": 12,
+        "f1": 0.6667
       }
     }
   },
   "lora": {
-    "correct": 18,
-    "accuracy": 0.72,
-    "macro_f1": 0.71,
+    "correct": 82,
+    "accuracy": 0.9647,
+    "macro_f1": 0.9646,
     "per_route": {
       "A": {
-        "support": 5,
-        "correct": 3,
-        "f1": 0.75
+        "support": 17,
+        "correct": 15,
+        "f1": 0.9375
       },
       "B": {
-        "support": 5,
-        "correct": 4,
-        "f1": 0.8
+        "support": 17,
+        "correct": 16,
+        "f1": 0.9697
       },
       "C": {
-        "support": 5,
-        "correct": 4,
-        "f1": 0.6667
+        "support": 17,
+        "correct": 17,
+        "f1": 0.9444
       },
       "D": {
-        "support": 5,
-        "correct": 2,
-        "f1": 0.5
+        "support": 17,
+        "correct": 17,
+        "f1": 0.9714
       },
       "E": {
-        "support": 5,
-        "correct": 5,
-        "f1": 0.8333
+        "support": 17,
+        "correct": 17,
+        "f1": 1.0
+      }
+    }
+  },
+  "by_dataset": {
+    "eval": {
+      "examples": 25,
+      "previous": {
+        "correct": 18,
+        "accuracy": 0.72,
+        "macro_f1": 0.71,
+        "per_route": {
+          "A": {
+            "support": 5,
+            "correct": 3,
+            "f1": 0.75
+          },
+          "B": {
+            "support": 5,
+            "correct": 4,
+            "f1": 0.8
+          },
+          "C": {
+            "support": 5,
+            "correct": 4,
+            "f1": 0.6667
+          },
+          "D": {
+            "support": 5,
+            "correct": 2,
+            "f1": 0.5
+          },
+          "E": {
+            "support": 5,
+            "correct": 5,
+            "f1": 0.8333
+          }
+        }
+      },
+      "baseline": {
+        "correct": 17,
+        "accuracy": 0.68,
+        "macro_f1": 0.6059,
+        "per_route": {
+          "A": {
+            "support": 5,
+            "correct": 5,
+            "f1": 1.0
+          },
+          "B": {
+            "support": 5,
+            "correct": 5,
+            "f1": 0.625
+          },
+          "C": {
+            "support": 5,
+            "correct": 2,
+            "f1": 0.5714
+          },
+          "D": {
+            "support": 5,
+            "correct": 0,
+            "f1": 0.0
+          },
+          "E": {
+            "support": 5,
+            "correct": 5,
+            "f1": 0.8333
+          }
+        }
+      },
+      "lora": {
+        "correct": 25,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "per_route": {
+          "A": {
+            "support": 5,
+            "correct": 5,
+            "f1": 1.0
+          },
+          "B": {
+            "support": 5,
+            "correct": 5,
+            "f1": 1.0
+          },
+          "C": {
+            "support": 5,
+            "correct": 5,
+            "f1": 1.0
+          },
+          "D": {
+            "support": 5,
+            "correct": 5,
+            "f1": 1.0
+          },
+          "E": {
+            "support": 5,
+            "correct": 5,
+            "f1": 1.0
+          }
+        }
+      }
+    },
+    "eval_bilingual": {
+      "examples": 40,
+      "previous": {
+        "correct": 37,
+        "accuracy": 0.925,
+        "macro_f1": 0.9244,
+        "per_route": {
+          "A": {
+            "support": 8,
+            "correct": 8,
+            "f1": 1.0
+          },
+          "B": {
+            "support": 8,
+            "correct": 7,
+            "f1": 0.8235
+          },
+          "C": {
+            "support": 8,
+            "correct": 8,
+            "f1": 0.9412
+          },
+          "D": {
+            "support": 8,
+            "correct": 6,
+            "f1": 0.8571
+          },
+          "E": {
+            "support": 8,
+            "correct": 8,
+            "f1": 1.0
+          }
+        }
+      },
+      "baseline": {
+        "correct": 26,
+        "accuracy": 0.65,
+        "macro_f1": 0.578,
+        "per_route": {
+          "A": {
+            "support": 8,
+            "correct": 8,
+            "f1": 0.8
+          },
+          "B": {
+            "support": 8,
+            "correct": 8,
+            "f1": 0.6957
+          },
+          "C": {
+            "support": 8,
+            "correct": 5,
+            "f1": 0.7692
+          },
+          "D": {
+            "support": 8,
+            "correct": 0,
+            "f1": 0.0
+          },
+          "E": {
+            "support": 8,
+            "correct": 5,
+            "f1": 0.625
+          }
+        }
+      },
+      "lora": {
+        "correct": 39,
+        "accuracy": 0.975,
+        "macro_f1": 0.9749,
+        "per_route": {
+          "A": {
+            "support": 8,
+            "correct": 7,
+            "f1": 0.9333
+          },
+          "B": {
+            "support": 8,
+            "correct": 8,
+            "f1": 1.0
+          },
+          "C": {
+            "support": 8,
+            "correct": 8,
+            "f1": 0.9412
+          },
+          "D": {
+            "support": 8,
+            "correct": 8,
+            "f1": 1.0
+          },
+          "E": {
+            "support": 8,
+            "correct": 8,
+            "f1": 1.0
+          }
+        }
+      }
+    },
+    "eval_release": {
+      "examples": 20,
+      "previous": {
+        "correct": 15,
+        "accuracy": 0.75,
+        "macro_f1": 0.7354,
+        "per_route": {
+          "A": {
+            "support": 4,
+            "correct": 2,
+            "f1": 0.5714
+          },
+          "B": {
+            "support": 4,
+            "correct": 3,
+            "f1": 0.75
+          },
+          "C": {
+            "support": 4,
+            "correct": 4,
+            "f1": 0.8889
+          },
+          "D": {
+            "support": 4,
+            "correct": 2,
+            "f1": 0.6667
+          },
+          "E": {
+            "support": 4,
+            "correct": 4,
+            "f1": 0.8
+          }
+        }
+      },
+      "baseline": {
+        "correct": 10,
+        "accuracy": 0.5,
+        "macro_f1": 0.4267,
+        "per_route": {
+          "A": {
+            "support": 4,
+            "correct": 4,
+            "f1": 0.8
+          },
+          "B": {
+            "support": 4,
+            "correct": 3,
+            "f1": 0.5
+          },
+          "C": {
+            "support": 4,
+            "correct": 1,
+            "f1": 0.3333
+          },
+          "D": {
+            "support": 4,
+            "correct": 0,
+            "f1": 0.0
+          },
+          "E": {
+            "support": 4,
+            "correct": 2,
+            "f1": 0.5
+          }
+        }
+      },
+      "lora": {
+        "correct": 18,
+        "accuracy": 0.9,
+        "macro_f1": 0.8984,
+        "per_route": {
+          "A": {
+            "support": 4,
+            "correct": 3,
+            "f1": 0.8571
+          },
+          "B": {
+            "support": 4,
+            "correct": 3,
+            "f1": 0.8571
+          },
+          "C": {
+            "support": 4,
+            "correct": 4,
+            "f1": 0.8889
+          },
+          "D": {
+            "support": 4,
+            "correct": 4,
+            "f1": 0.8889
+          },
+          "E": {
+            "support": 4,
+            "correct": 4,
+            "f1": 1.0
+          }
+        }
+      }
+    }
+  },
+  "by_language": {
+    "en": {
+      "examples": 30,
+      "previous": {
+        "correct": 26,
+        "accuracy": 0.8667,
+        "macro_f1": 0.8626,
+        "per_route": {
+          "A": {
+            "support": 6,
+            "correct": 5,
+            "f1": 0.8333
+          },
+          "B": {
+            "support": 6,
+            "correct": 5,
+            "f1": 0.8333
+          },
+          "C": {
+            "support": 6,
+            "correct": 6,
+            "f1": 0.9231
+          },
+          "D": {
+            "support": 6,
+            "correct": 4,
+            "f1": 0.8
+          },
+          "E": {
+            "support": 6,
+            "correct": 6,
+            "f1": 0.9231
+          }
+        }
+      },
+      "baseline": {
+        "correct": 17,
+        "accuracy": 0.5667,
+        "macro_f1": 0.4931,
+        "per_route": {
+          "A": {
+            "support": 6,
+            "correct": 6,
+            "f1": 0.75
+          },
+          "B": {
+            "support": 6,
+            "correct": 5,
+            "f1": 0.5882
+          },
+          "C": {
+            "support": 6,
+            "correct": 4,
+            "f1": 0.7273
+          },
+          "D": {
+            "support": 6,
+            "correct": 0,
+            "f1": 0.0
+          },
+          "E": {
+            "support": 6,
+            "correct": 2,
+            "f1": 0.4
+          }
+        }
+      },
+      "lora": {
+        "correct": 27,
+        "accuracy": 0.9,
+        "macro_f1": 0.8979,
+        "per_route": {
+          "A": {
+            "support": 6,
+            "correct": 4,
+            "f1": 0.8
+          },
+          "B": {
+            "support": 6,
+            "correct": 5,
+            "f1": 0.9091
+          },
+          "C": {
+            "support": 6,
+            "correct": 6,
+            "f1": 0.8571
+          },
+          "D": {
+            "support": 6,
+            "correct": 6,
+            "f1": 0.9231
+          },
+          "E": {
+            "support": 6,
+            "correct": 6,
+            "f1": 1.0
+          }
+        }
+      }
+    },
+    "zh": {
+      "examples": 30,
+      "previous": {
+        "correct": 26,
+        "accuracy": 0.8667,
+        "macro_f1": 0.8649,
+        "per_route": {
+          "A": {
+            "support": 6,
+            "correct": 5,
+            "f1": 0.9091
+          },
+          "B": {
+            "support": 6,
+            "correct": 5,
+            "f1": 0.7692
+          },
+          "C": {
+            "support": 6,
+            "correct": 6,
+            "f1": 0.9231
+          },
+          "D": {
+            "support": 6,
+            "correct": 4,
+            "f1": 0.8
+          },
+          "E": {
+            "support": 6,
+            "correct": 6,
+            "f1": 0.9231
+          }
+        }
+      },
+      "baseline": {
+        "correct": 19,
+        "accuracy": 0.6333,
+        "macro_f1": 0.5476,
+        "per_route": {
+          "A": {
+            "support": 6,
+            "correct": 6,
+            "f1": 0.8571
+          },
+          "B": {
+            "support": 6,
+            "correct": 6,
+            "f1": 0.6667
+          },
+          "C": {
+            "support": 6,
+            "correct": 2,
+            "f1": 0.5
+          },
+          "D": {
+            "support": 6,
+            "correct": 0,
+            "f1": 0.0
+          },
+          "E": {
+            "support": 6,
+            "correct": 5,
+            "f1": 0.7143
+          }
+        }
+      },
+      "lora": {
+        "correct": 30,
+        "accuracy": 1.0,
+        "macro_f1": 1.0,
+        "per_route": {
+          "A": {
+            "support": 6,
+            "correct": 6,
+            "f1": 1.0
+          },
+          "B": {
+            "support": 6,
+            "correct": 6,
+            "f1": 1.0
+          },
+          "C": {
+            "support": 6,
+            "correct": 6,
+            "f1": 1.0
+          },
+          "D": {
+            "support": 6,
+            "correct": 6,
+            "f1": 1.0
+          },
+          "E": {
+            "support": 6,
+            "correct": 6,
+            "f1": 1.0
+          }
+        }
       }
     }
   },
   "predictions": [
     {
+      "dataset": "eval",
+      "language": null,
       "expected": "A",
-      "baseline": "D",
+      "previous": "A",
+      "baseline": "A",
       "lora": "A"
     },
     {
+      "dataset": "eval",
+      "language": null,
       "expected": "A",
-      "baseline": "C",
-      "lora": "E"
-    },
-    {
-      "expected": "A",
-      "baseline": "C",
-      "lora": "D"
-    },
-    {
-      "expected": "A",
-      "baseline": "C",
+      "previous": "E",
+      "baseline": "A",
       "lora": "A"
     },
     {
+      "dataset": "eval",
+      "language": null,
       "expected": "A",
-      "baseline": "B",
+      "previous": "D",
+      "baseline": "A",
       "lora": "A"
     },
     {
+      "dataset": "eval",
+      "language": null,
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
       "expected": "B",
+      "previous": "B",
       "baseline": "B",
       "lora": "B"
     },
     {
+      "dataset": "eval",
+      "language": null,
       "expected": "B",
-      "baseline": "C",
-      "lora": "B"
-    },
-    {
-      "expected": "B",
+      "previous": "B",
       "baseline": "B",
       "lora": "B"
     },
     {
+      "dataset": "eval",
+      "language": null,
       "expected": "B",
-      "baseline": "B",
-      "lora": "C"
-    },
-    {
-      "expected": "B",
+      "previous": "B",
       "baseline": "B",
       "lora": "B"
     },
     {
-      "expected": "C",
-      "baseline": "D",
-      "lora": "E"
+      "dataset": "eval",
+      "language": null,
+      "expected": "B",
+      "previous": "C",
+      "baseline": "B",
+      "lora": "B"
     },
     {
+      "dataset": "eval",
+      "language": null,
+      "expected": "B",
+      "previous": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
       "expected": "C",
+      "previous": "E",
       "baseline": "C",
       "lora": "C"
     },
     {
+      "dataset": "eval",
+      "language": null,
       "expected": "C",
+      "previous": "C",
+      "baseline": "B",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
+      "expected": "C",
+      "previous": "C",
       "baseline": "C",
       "lora": "C"
     },
     {
+      "dataset": "eval",
+      "language": null,
       "expected": "C",
-      "baseline": "C",
+      "previous": "C",
+      "baseline": "B",
       "lora": "C"
     },
     {
+      "dataset": "eval",
+      "language": null,
       "expected": "C",
-      "baseline": "D",
+      "previous": "C",
+      "baseline": "B",
       "lora": "C"
     },
     {
+      "dataset": "eval",
+      "language": null,
       "expected": "D",
-      "baseline": "C",
-      "lora": "C"
-    },
-    {
-      "expected": "D",
-      "baseline": "C",
+      "previous": "C",
+      "baseline": "B",
       "lora": "D"
     },
     {
+      "dataset": "eval",
+      "language": null,
       "expected": "D",
+      "previous": "D",
+      "baseline": "B",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
+      "expected": "D",
+      "previous": "C",
+      "baseline": "B",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
+      "expected": "D",
+      "previous": "D",
+      "baseline": "E",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
+      "expected": "D",
+      "previous": "B",
+      "baseline": "E",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
+      "expected": "E",
+      "previous": "E",
+      "baseline": "E",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
+      "expected": "E",
+      "previous": "E",
+      "baseline": "E",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
+      "expected": "E",
+      "previous": "E",
+      "baseline": "E",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
+      "expected": "E",
+      "previous": "E",
+      "baseline": "E",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval",
+      "language": null,
+      "expected": "E",
+      "previous": "E",
+      "baseline": "E",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "B",
+      "previous": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "B",
+      "previous": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "B",
+      "previous": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "B",
+      "previous": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "C",
+      "previous": "C",
       "baseline": "C",
       "lora": "C"
     },
     {
-      "expected": "D",
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "C",
+      "previous": "C",
       "baseline": "C",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "C",
+      "previous": "C",
+      "baseline": "B",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "C",
+      "previous": "C",
+      "baseline": "C",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "D",
+      "previous": "D",
+      "baseline": "B",
       "lora": "D"
     },
     {
+      "dataset": "eval_bilingual",
+      "language": "en",
       "expected": "D",
-      "baseline": "C",
+      "previous": "D",
+      "baseline": "B",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "D",
+      "previous": "D",
+      "baseline": "B",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "D",
+      "previous": "D",
+      "baseline": "E",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "E",
+      "previous": "E",
+      "baseline": "A",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "E",
+      "previous": "E",
+      "baseline": "E",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "E",
+      "previous": "E",
+      "baseline": "E",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "en",
+      "expected": "E",
+      "previous": "E",
+      "baseline": "A",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "B",
+      "previous": "B",
+      "baseline": "B",
       "lora": "B"
     },
     {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "B",
+      "previous": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "B",
+      "previous": "C",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "B",
+      "previous": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "C",
+      "previous": "C",
+      "baseline": "C",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "C",
+      "previous": "C",
+      "baseline": "C",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "C",
+      "previous": "C",
+      "baseline": "B",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "C",
+      "previous": "C",
+      "baseline": "E",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "D",
+      "previous": "B",
+      "baseline": "B",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "D",
+      "previous": "D",
+      "baseline": "E",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "D",
+      "previous": "D",
+      "baseline": "B",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "D",
+      "previous": "B",
+      "baseline": "A",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
       "expected": "E",
+      "previous": "E",
+      "baseline": "E",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "E",
+      "previous": "E",
+      "baseline": "E",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "E",
+      "previous": "E",
+      "baseline": "A",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval_bilingual",
+      "language": "zh",
+      "expected": "E",
+      "previous": "E",
+      "baseline": "E",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "en",
+      "expected": "A",
+      "previous": "E",
+      "baseline": "A",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "en",
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "en",
+      "expected": "B",
+      "previous": "C",
+      "baseline": "A",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "en",
+      "expected": "B",
+      "previous": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "en",
+      "expected": "C",
+      "previous": "C",
+      "baseline": "B",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "en",
+      "expected": "C",
+      "previous": "C",
+      "baseline": "C",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "en",
+      "expected": "D",
+      "previous": "B",
+      "baseline": "E",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "en",
+      "expected": "D",
+      "previous": "A",
+      "baseline": "B",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "en",
+      "expected": "E",
+      "previous": "E",
+      "baseline": "A",
+      "lora": "E"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "en",
+      "expected": "E",
+      "previous": "E",
       "baseline": "C",
       "lora": "E"
     },
     {
+      "dataset": "eval_release",
+      "language": "zh",
+      "expected": "A",
+      "previous": "E",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "zh",
+      "expected": "A",
+      "previous": "A",
+      "baseline": "A",
+      "lora": "A"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "zh",
+      "expected": "B",
+      "previous": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "zh",
+      "expected": "B",
+      "previous": "B",
+      "baseline": "B",
+      "lora": "B"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "zh",
+      "expected": "C",
+      "previous": "C",
+      "baseline": "B",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "zh",
+      "expected": "C",
+      "previous": "C",
+      "baseline": "E",
+      "lora": "C"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "zh",
+      "expected": "D",
+      "previous": "D",
+      "baseline": "B",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "zh",
+      "expected": "D",
+      "previous": "D",
+      "baseline": "B",
+      "lora": "D"
+    },
+    {
+      "dataset": "eval_release",
+      "language": "zh",
       "expected": "E",
-      "baseline": "D",
+      "previous": "E",
+      "baseline": "E",
       "lora": "E"
     },
     {
+      "dataset": "eval_release",
+      "language": "zh",
       "expected": "E",
-      "baseline": "D",
-      "lora": "E"
-    },
-    {
-      "expected": "E",
-      "baseline": "C",
-      "lora": "E"
-    },
-    {
-      "expected": "E",
-      "baseline": "D",
+      "previous": "E",
+      "baseline": "E",
       "lora": "E"
     }
-  ]
+  ],
+  "initial_training": {
+    "train_examples": 600,
+    "epochs": 3,
+    "learning_rate": 0.0001,
+    "elapsed_seconds": 72.1
+  }
 }

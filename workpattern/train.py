@@ -6,13 +6,14 @@ import time
 from pathlib import Path
 
 import torch
-from peft import LoraConfig, get_peft_model
+from peft import LoraConfig, PeftConfig, PeftModel, get_peft_model
 from torch.nn import functional as F
 
-from .model import BASE_ID, MAX_FEEDBACK, MODEL_DIR, REVISION, ROOT, batch_inputs, load_base, next_logits, predict, token_ids
+from .model import BASE_ID, BASE_MODELS, MAX_FEEDBACK, MODEL_DIR, ROOT, batch_inputs, load_base, next_logits, predict, token_ids
 from .playbook import ROUTES
 
 DATA = ROOT / "data"
+DEFAULT_EVAL_FILES = [DATA / "eval.jsonl", DATA / "eval_bilingual.jsonl", DATA / "eval_release.jsonl"]
 SEED = 42
 CONTEXTS = [
     ("付费客户", "订单结算", "支付确认页长时间空白", "近一小时订单成功率下降七成", "账单预览", "对账时常需要反复查看明细"),
@@ -30,7 +31,7 @@ CONTEXTS = [
 ]
 
 
-def synthetic_rows():
+def synthetic_rows(include_followup=True):
     scenarios = json.loads((DATA / "train_scenarios.json").read_text(encoding="utf-8"))
     rows = []
     for label, templates in scenarios.items():
@@ -42,6 +43,17 @@ def synthetic_rows():
                     request=request, need=need, number=idx,
                 )
                 rows.append({"route": label, "feedback": feedback})
+    bilingual = json.loads((DATA / "bilingual_scenarios.json").read_text(encoding="utf-8"))
+    for language, routes in bilingual["templates"].items():
+        followup = bilingual["followup_templates"][language] if include_followup else {}
+        for label, templates in routes.items():
+            for ticket, context in enumerate(bilingual["contexts"], start=301):
+                area, symptom, feature, need = context[language]
+                for template in templates + followup.get(label, []):
+                    feedback = template.format(
+                        area=area, symptom=symptom, feature=feature, need=need, ticket=ticket,
+                    )
+                    rows.append({"route": label, "feedback": feedback})
     return rows
 
 
@@ -58,7 +70,7 @@ def read_jsonl(path):
             or row.get("route") not in ROUTES
         ):
             raise ValueError(f"{path}:{line_number}: expected a feedback string and route A–E")
-        rows.append({"feedback": feedback.strip(), "route": row["route"]})
+        rows.append({"feedback": feedback.strip(), "route": row["route"], "language": row.get("language")})
     if not rows:
         raise ValueError(f"{path} has no examples")
     return rows
@@ -92,20 +104,52 @@ def metrics(actual, predicted):
     }
 
 
+def group_metrics(rows, predictions, field):
+    groups = {}
+    for index, row in enumerate(rows):
+        if row.get(field):
+            groups.setdefault(row[field], []).append(index)
+    return {
+        group: {
+            "examples": len(indices),
+            **{
+                name: metrics([rows[i]["route"] for i in indices], [values[i] for i in indices])
+                for name, values in predictions.items()
+            },
+        }
+        for group, indices in groups.items()
+    }
+
+
 def main():
     parser = argparse.ArgumentParser(description="Fine-tune the feedback router with LoRA.")
     parser.add_argument("--train-file", type=Path)
-    parser.add_argument("--eval-file", type=Path, default=DATA / "eval.jsonl")
+    parser.add_argument("--initial-pass", action="store_true", help="Use the initial synthetic training cases.")
+    parser.add_argument("--eval-file", type=Path, action="append", help="Held-out JSONL file. Can be repeated.")
+    parser.add_argument("--compare-adapter", type=Path, help="Existing LoRA adapter to evaluate on the same cases.")
+    parser.add_argument("--init-adapter", type=Path, help="Continue training an adapter for the selected base model.")
+    parser.add_argument("--learning-rate", type=float, default=0.0002)
     parser.add_argument("--output", type=Path, default=MODEL_DIR / "adapter")
+    parser.add_argument("--base-model", choices=BASE_MODELS, default=BASE_ID)
     parser.add_argument("--epochs", type=int, default=4)
     parser.add_argument("--batch-size", type=int, default=8)
     args = parser.parse_args()
     if args.epochs < 1 or args.batch_size < 1:
         parser.error("epochs and batch-size must be positive")
+    if not math.isfinite(args.learning_rate) or args.learning_rate <= 0:
+        parser.error("learning-rate must be finite and positive")
+    if args.init_adapter and PeftConfig.from_pretrained(args.init_adapter).base_model_name_or_path != args.base_model:
+        parser.error("--init-adapter requires an adapter for the selected base model")
     if not torch.cuda.is_available() or not torch.cuda.is_bf16_supported():
         raise RuntimeError("Training requires a CUDA GPU with BF16 support.")
-    rows = read_jsonl(args.train_file) if args.train_file else synthetic_rows()
-    held_out = read_jsonl(args.eval_file)
+    if args.train_file and args.initial_pass:
+        parser.error("--initial-pass applies only to built-in training cases")
+    rows = read_jsonl(args.train_file) if args.train_file else synthetic_rows(include_followup=not args.initial_pass)
+    held_out = [
+        {**row, "dataset": path.stem}
+        for path in (args.eval_file or DEFAULT_EVAL_FILES)
+        for row in read_jsonl(path)
+    ]
     if {item["feedback"] for item in rows} & {item["feedback"] for item in held_out}:
         raise ValueError("Training and evaluation files contain identical feedback.")
 
@@ -113,14 +157,25 @@ def main():
     torch.manual_seed(SEED)
     started = time.perf_counter()
     torch.cuda.reset_peak_memory_stats()
-    base, tokenizer = load_base("cuda")
-    baseline = evaluate(base.eval(), tokenizer, held_out, args.batch_size)
-    model = get_peft_model(base, LoraConfig(
-        task_type="CAUSAL_LM", r=8, lora_alpha=16, lora_dropout=0.05,
-        target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
-    ))
+    predictions = {}
+    previous_base_id = None
+    if args.compare_adapter:
+        previous_base_id = PeftConfig.from_pretrained(args.compare_adapter).base_model_name_or_path
+        compare_base, compare_tokenizer = load_base("cuda", previous_base_id)
+        previous = PeftModel.from_pretrained(compare_base, args.compare_adapter)
+        predictions["previous"] = evaluate(previous.eval(), compare_tokenizer, held_out, args.batch_size)
+        del previous, compare_base, compare_tokenizer
+    base, tokenizer = load_base("cuda", args.base_model)
+    predictions["baseline"] = evaluate(base.eval(), tokenizer, held_out, args.batch_size)
+    if args.init_adapter:
+        model = PeftModel.from_pretrained(base, args.init_adapter, is_trainable=True)
+    else:
+        model = get_peft_model(base, LoraConfig(
+            task_type="CAUSAL_LM", r=8, lora_alpha=16, lora_dropout=0.05,
+            target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
+        ))
     trainable = [parameter for parameter in model.parameters() if parameter.requires_grad]
-    optimizer = torch.optim.AdamW(trainable, lr=0.0002)
+    optimizer = torch.optim.AdamW(trainable, lr=args.learning_rate)
     targets = dict(zip(ROUTES, token_ids(tokenizer), strict=True))
     losses = []
     for epoch in range(args.epochs):
@@ -140,26 +195,45 @@ def main():
         losses.append(round(loss_total / math.ceil(len(rows) / args.batch_size), 4))
         print(f"epoch {epoch + 1}/{args.epochs}  loss={losses[-1]}", flush=True)
 
-    trained = evaluate(model.eval(), tokenizer, held_out, args.batch_size)
+    predictions["lora"] = evaluate(model.eval(), tokenizer, held_out, args.batch_size)
     actual = [row["route"] for row in held_out]
-    model.peft_config["default"].base_model_name_or_path = BASE_ID
-    model.peft_config["default"].revision = REVISION
+    revision, _ = BASE_MODELS[args.base_model]
+    model.peft_config["default"].base_model_name_or_path = args.base_model
+    model.peft_config["default"].revision = revision
     model.save_pretrained(args.output)
     report = {
-        "base_model": BASE_ID, "revision": REVISION, "gpu": torch.cuda.get_device_name(),
+        "base_model": args.base_model, "revision": revision, "previous_base_model": previous_base_id,
+        "gpu": torch.cuda.get_device_name(),
         "torch_version": torch.__version__, "seed": SEED, "train_examples": len(rows),
         "eval_examples": len(held_out), "epochs": args.epochs, "batch_size": args.batch_size,
+        "continued_training": args.init_adapter is not None, "learning_rate": args.learning_rate,
         "trainable_parameters": sum(parameter.numel() for parameter in trainable),
         "peak_allocated_vram_mib": round(torch.cuda.max_memory_allocated() / 2**20),
         "elapsed_seconds": round(time.perf_counter() - started, 1), "epoch_loss": losses,
-        "baseline": metrics(actual, baseline), "lora": metrics(actual, trained),
+        **{name: metrics(actual, values) for name, values in predictions.items()},
+        "by_dataset": group_metrics(held_out, predictions, "dataset"),
+        "by_language": group_metrics(held_out, predictions, "language"),
         "predictions": [
-            {"expected": row["route"], "baseline": before, "lora": after}
-            for row, before, after in zip(held_out, baseline, trained, strict=True)
+            {
+                "dataset": row["dataset"], "language": row["language"], "expected": row["route"],
+                **{name: values[index] for name, values in predictions.items()},
+            }
+            for index, row in enumerate(held_out)
         ],
     }
     (args.output / "evaluation.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-    print(json.dumps({key: value for key, value in report.items() if key != "predictions"}, indent=2))
+    print(json.dumps({
+        "eval_examples": len(held_out),
+        **{name: report[name]["correct"] for name in predictions},
+        "by_dataset": {
+            key: {name: summary[name]["correct"] for name in predictions}
+            for key, summary in report["by_dataset"].items()
+        },
+        "by_language": {
+            key: {name: summary[name]["correct"] for name in predictions}
+            for key, summary in report["by_language"].items()
+        },
+    }, indent=2))
 
 
 if __name__ == "__main__":

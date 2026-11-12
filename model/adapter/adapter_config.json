@@ -1,7 +1,7 @@
 {
   "alpha_pattern": {},
   "auto_mapping": null,
-  "base_model_name_or_path": "Qwen/Qwen2.5-0.5B-Instruct",
+  "base_model_name_or_path": "Qwen/Qwen2.5-1.5B-Instruct",
   "bias": "none",
   "corda_config": null,
   "eva_config": null,
@@ -23,12 +23,12 @@
   "qalora_group_size": 16,
   "r": 8,
   "rank_pattern": {},
-  "revision": "7ae557604adf67be50417f59c2c2f167def9a775",
+  "revision": "989aa7980e4cf806f80c7fef2b1adb7bc71aa306",
   "target_modules": [
-    "q_proj",
+    "k_proj",
     "o_proj",
     "v_proj",
-    "k_proj"
+    "q_proj"
   ],
   "task_type": "CAUSAL_LM",
   "trainable_token_indices": null,
