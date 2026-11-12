@@ -7,11 +7,46 @@ const hosted = location.hostname === "aul-ravens.github.io";
 const connectPanel = byId("connect-panel");
 const connectButton = byId("connect");
 const connectError = byId("connect-error");
+const connectHelp = byId("connect-help");
+const defaultConnectHelp = connectHelp.textContent;
 const status = byId("connection");
 let config;
 let current;
 let modelRoute;
 let submittedFeedback;
+let pendingSample;
+
+const menuToggle = byId("menu-toggle");
+const siteMenu = byId("site-menu");
+const navigation = siteMenu.closest(".navigation");
+
+function setMenu(open) {
+  menuToggle.setAttribute("aria-expanded", String(open));
+  navigation.toggleAttribute("data-menu-open", open);
+}
+
+function closeMenus() {
+  setMenu(false);
+  siteMenu.querySelectorAll("details[open]").forEach((group) => { group.open = false; });
+}
+
+menuToggle.addEventListener("click", () => {
+  if (menuToggle.getAttribute("aria-expanded") === "true") closeMenus();
+  else setMenu(true);
+});
+siteMenu.addEventListener("click", (event) => {
+  if (event.target.closest("a")) closeMenus();
+});
+document.addEventListener("click", (event) => {
+  if (!navigation.contains(event.target)) closeMenus();
+});
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || !navigation.contains(document.activeElement)) return;
+  const trigger = siteMenu.querySelector("details[open] summary");
+  if (menuToggle.getAttribute("aria-expanded") === "true" && menuToggle.getClientRects().length) menuToggle.focus();
+  else if (trigger) trigger.focus();
+  closeMenus();
+});
 
 function updateCount() {
   byId("count").textContent = `${[...feedback.value].length} / ${feedback.maxLength}`;
@@ -27,6 +62,9 @@ function renderWorkflow(route) {
   current = route;
   byId("decision-title").textContent = route.title;
   byId("criterion").textContent = route.criterion;
+  const original = byId("original-decision");
+  original.hidden = route.code === modelRoute.code;
+  original.textContent = original.hidden ? "" : `模型原建议：${modelRoute.title}`;
   override.value = route.code;
   byId("steps").replaceChildren(...route.steps.map((step) => {
     const label = document.createElement("label");
@@ -53,6 +91,27 @@ function showError(message) {
   error.hidden = !message;
 }
 
+function fillSample(content) {
+  feedback.value = content;
+  updateCount();
+  showError("");
+  feedback.focus({preventScroll: true});
+}
+
+document.querySelectorAll("[data-sample]").forEach((link) => {
+  link.addEventListener("click", () => {
+    const name = link.dataset.sample;
+    const sample = config?.samples.find(([title]) => title === name);
+    if (sample && connectPanel.hidden) {
+      fillSample(sample[1]);
+      return;
+    }
+    pendingSample = name;
+    connectHelp.textContent = `已选「${name}」。连接本地模型后会自动填入示例。`;
+    connectButton.focus({preventScroll: true});
+  });
+});
+
 function apiFetch(path, options = {}) {
   const request = {...options, credentials: "omit", redirect: "error"};
   if (hosted) {
@@ -77,11 +136,7 @@ async function initialize() {
       const button = document.createElement("button");
       button.type = "button";
       button.textContent = title;
-      button.addEventListener("click", () => {
-        feedback.value = content;
-        updateCount();
-        feedback.focus();
-      });
+      button.addEventListener("click", () => fillSample(content));
       byId("samples").append(button);
     }
     override.replaceChildren();
@@ -99,6 +154,12 @@ async function initialize() {
       byId("metrics").replaceChildren(p);
     }
     connectPanel.hidden = true;
+    connectHelp.textContent = defaultConnectHelp;
+    if (pendingSample) {
+      const sample = config.samples.find(([title]) => title === pendingSample);
+      pendingSample = undefined;
+      if (sample) fillSample(sample[1]);
+    }
     showError("");
     run.disabled = false;
   } catch {
@@ -117,6 +178,7 @@ function disconnect() {
     : "请启动 WorkPattern 本地服务，然后重新连接。";
   connectError.hidden = false;
   run.disabled = true;
+  byId("latency").textContent = "正在分析反馈";
 }
 
 connectButton.addEventListener("click", initialize);
@@ -148,8 +210,9 @@ byId("triage-form").addEventListener("submit", async (event) => {
     submittedFeedback = input;
     modelRoute = payload.workflow;
     renderWorkflow(modelRoute);
-    byId("latency").textContent = `${payload.elapsed_ms} ms`;
+    byId("latency").textContent = `分析完成 · ${payload.elapsed_ms} ms`;
   } catch (exception) {
+    byId("latency").textContent = "";
     if (exception instanceof TypeError) disconnect();
     else showError(exception.message);
   } finally {

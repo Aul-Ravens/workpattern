@@ -25,9 +25,25 @@
     <img class="hero-art" src="./images/robot-workshop.jpg" alt="" width="1672" height="941" fetchpriority="high">
     <header class="wrap navigation">
       <a class="brand" href="#top"><span class="mark" aria-hidden="true">W</span> WorkPattern</a>
-      <nav class="nav-links" aria-label="站内导航">
-        <a href="#how">工作方式</a>
-        <a href="#evaluation">模型评测</a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-controls="site-menu" aria-expanded="false">
+        <span aria-hidden="true"></span><span class="sr-only">站内菜单</span>
+      </button>
+      <nav class="nav-links" id="site-menu" aria-label="站内导航">
+        <details class="nav-group" name="site-navigation">
+          <summary>工作方式</summary>
+          <div class="nav-options">
+            <a href="#how">分流流程</a>
+            <a href="#examples">反馈示例</a>
+          </div>
+        </details>
+        <details class="nav-group" name="site-navigation">
+          <summary>模型评测</summary>
+          <div class="nav-options">
+            <a href="#evaluation">评测结果</a>
+            <a href="https://github.com/Aul-Ravens/workpattern/blob/main/model/adapter/evaluation.json">逐条评测记录</a>
+          </div>
+        </details>
+        <a class="mobile-workbench" href="#workbench">打开工作台 <span aria-hidden="true">→</span></a>
       </nav>
       <a class="button button-aqua nav-action" href="#workbench">工作台 <span aria-hidden="true">→</span></a>
     </header>
@@ -65,6 +81,41 @@
         </section>
       </div>
     </section>
+    <section class="examples wrap" id="examples" aria-labelledby="examples-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="examples-title">试试一条反馈</h2>
+          <p>选一个常见场景，看看模型会建议哪条处理流程。</p>
+        </div>
+        <a class="button button-lime" href="#workbench">输入自己的反馈 <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="case-grid">
+        <a class="case-card case-featured" href="#workbench" data-sample="核心链路故障">
+          <img src="./images/robot-workshop.jpg" width="1672" height="941" alt="" loading="lazy">
+          <div class="case-copy">
+            <span class="case-tag">核心链路故障</span>
+            <h3>发布后，多地用户下单失败</h3>
+            <span class="arrow-link">填入示例 <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+        <a class="case-card" href="#workbench" data-sample="新增需求">
+          <img src="./images/robot-review.jpg" width="920" height="690" alt="" loading="lazy">
+          <div class="case-copy">
+            <span class="case-tag">新增需求</span>
+            <h3>运营希望批量导出周报</h3>
+            <span class="arrow-link">填入示例 <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+        <a class="case-card" href="#workbench" data-sample="已有工单">
+          <img src="./images/robot-checklist.jpg" width="760" height="570" alt="" loading="lazy">
+          <div class="case-copy">
+            <span class="case-tag">已有工单</span>
+            <h3>验证码问题再次出现</h3>
+            <span class="arrow-link">填入示例 <span aria-hidden="true">→</span></span>
+          </div>
+        </a>
+      </div>
+    </section>
     <section class="workbench wrap" id="workbench" aria-labelledby="workbench-title">
       <h2 id="workbench-title">反馈分流工作台</h2>
       <section id="connect-panel" class="panel connect-panel" aria-labelledby="connect-title" hidden>
@@ -94,16 +145,17 @@
         <section class="panel result" aria-labelledby="result-title">
           <div class="panel-head">
             <h3 id="result-title">处理流程</h3>
-            <span id="latency"></span>
+            <span id="latency" role="status"></span>
           </div>
           <div id="empty" class="empty">
             <span class="list-icon" aria-hidden="true"><i></i><i></i><i></i></span>
-            <p>提交反馈后，这里会显示处理步骤。</p>
+            <p>提交一条反馈，查看分流建议和处理步骤。</p>
           </div>
           <div id="workflow" hidden>
             <div class="decision">
               <h4 id="decision-title"></h4>
               <p id="criterion"></p>
+              <p class="original-decision" id="original-decision" hidden></p>
             </div>
             <label class="override">复核分流 <select id="override"></select></label>
             <div id="steps"></div>
